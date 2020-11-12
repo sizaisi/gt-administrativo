@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container" style="background-color: #fff; padding:20px;">
+    <div class="container-fluid" style="background-color: #fff; padding:20px;">
       <h5
         class="text-center font-weight-bold text-uppercase text-danger"
         v-text="grado_procedimiento.proc_nombre"
@@ -21,10 +21,10 @@
         </b-button>
       </div>
       <b-card no-body>
-        <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">
-          <b-tab title="Información de Expediente" active>
+        <b-tabs vertical card pills>
+          <b-tab title="Expediente" active>
             <b-card no-body>
-              <b-tabs pills card vertical>
+              <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">
                 <b-tab title="Expediente">
                   <!-- Información expediente -->
                   <div class="mb-3">
@@ -130,9 +130,9 @@
               </b-tabs>
             </b-card>
           </b-tab>
-          <b-tab title="Información de Procedencia" v-if="movimiento != null">
+          <b-tab title="Procedencia" v-if="movimiento != null">
             <b-card no-body>
-              <b-tabs pills card vertical>
+              <b-tabs card active-nav-item-class="font-weight-bold text-uppercase text-danger">
                 <b-tab title="Estado de expediente">
                   <!-- Información procedimiento origen -->
                   <div class="mb-3">
@@ -224,7 +224,7 @@
               </b-tabs>
             </b-card>
           </b-tab>
-          <b-tab title="Procesamiento de Expediente" v-if="movimiento != null">
+          <b-tab title="Derivación" v-if="movimiento != null">
             <!-- Compoenente del procedimiento -->
             <component
               :is="nombre_componente"

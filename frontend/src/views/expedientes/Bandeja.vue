@@ -7,7 +7,7 @@
         </b-button>
     </div> 
     <b-card no-body>
-        <b-tabs pills card vertical>
+        <b-tabs card active-nav-item-class="font-weight-bold text-uppercase text-danger">
             <b-tab title="Recibidos" @click="getExpedientes(grado_procedimiento.id, grado_procedimiento.tipo_rol)" active>                
                 <div class="row">
                     <div class="col-lg-12">

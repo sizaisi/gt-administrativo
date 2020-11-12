@@ -12,7 +12,7 @@ class Caja {
     	
     public function getPagosProfesionalTesis($cui, $nues, $espe) 
     {
-        /*$result = array('error' => false);              
+        $result = array('error' => false);              
 
         $sql = "SELECT RC.RECA_ID AS idrecibo, RC.RECA_FDIG AS fecha_pago, 
                     CONCAT(RC.RECA_SERIE, '-', RC.RECA_CORRELATIVO) AS nro_recibo                       
@@ -46,9 +46,9 @@ class Caja {
 
         $result['array_pagos'] = $array_pagos;      
 
-        return $result;*/        
+        return $result;
         
-        $result = array('error' => false);  
+        /*$result = array('error' => false);  
 
         $sql = "SELECT RC.RECA_ID AS idrecibo, RC.RECA_FDIG AS fecha_pago, 
                        CONCAT(RC.RECA_SERIE, '-', RC.RECA_CORRELATIVO) AS nro_recibo, 
@@ -72,6 +72,6 @@ class Caja {
 
         $result['array_pagos'] = $array_pagos;      
 
-        return $result;
+        return $result;*/
     }
 }
