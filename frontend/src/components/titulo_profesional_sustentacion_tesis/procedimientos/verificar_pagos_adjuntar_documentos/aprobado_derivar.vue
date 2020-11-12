@@ -97,7 +97,12 @@ export default {
             url: this.$root.API_URL,      
             tabIndex: 0,         
             tabIndex2: 0, 
-            array_conceptos : [13, 27, 961],
+            array_conceptos : [13, 27, 961],                
+            conceptos : {
+                13: 'CONSTANCIA DE INGRESO O DE EGRESADO',
+                27: 'CONSTANCIA DE BIBLIOTECA',
+                961: 'CONSTANCIA PRIMERA MATRICULA PREGRADO'
+            },
             array_pagos : [],            
             existeRecursoRutaVecinas : false, 
             array_tipo_documento: [
@@ -127,8 +132,7 @@ export default {
             let pasar = false              
                             
             if (this.tabIndex == 0) {
-                //pasar = this.validarTab1()
-                pasar = true;
+                pasar = this.validarTab1()                
             }         
 
             if (this.tabIndex == 1) {
@@ -182,8 +186,7 @@ export default {
                 }
             })  
         },           
-        getPagos() {            
-            let me = this      
+        getPagos() {                        
             let formData = this._toFormData({
                 cui: this.graduando.cui,
                 nues: this.expediente.nues,
@@ -193,19 +196,18 @@ export default {
             this.toggleBusy()
 
             this.axios.post(`${this.url}/Caja/getPagosProfesionalTesis`, formData)
-                .then(function(response) {                                              
+                .then(response => {    
                     if (!response.data.error) {                
-                        me.array_pagos = response.data.array_pagos                        
+                        this.array_pagos = response.data.array_pagos                        
                     }
                     else {                
                         console.log(response.data.message)      
                     }
-                    me.toggleBusy()
+                    this.toggleBusy()
                 })
         },   
         verificarPagos() {              
-            if (this.array_pagos.length > 0) {//si hay algun pago en caja 
-
+            if (this.array_pagos.length > 0) {              
                 for (let i = 0; i < this.array_conceptos.length; i++) {
                     let encontrado = false
 
@@ -217,7 +219,7 @@ export default {
                     }
 
                     if (encontrado == false) {
-                        this.errors.push(`No se encontró el concepto ${this.array_conceptos[i]}`)
+                        this.errors.push(`No se encontró el concepto: ${this.conceptos[this.array_conceptos[i]]}`)
                     }
                 }            
             }
