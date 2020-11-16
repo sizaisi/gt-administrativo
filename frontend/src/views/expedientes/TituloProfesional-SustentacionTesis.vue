@@ -22,48 +22,10 @@
       </div>
       <b-card no-body>
         <b-tabs vertical card pills>
-          <b-tab title="Expediente" active>
+          <b-tab title="Trámite" active>
             <b-card no-body>
               <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">
-                <b-tab title="Expediente">
-                  <!-- Información expediente -->
-                  <div class="mb-3">
-                    <h4 class="text-info text-center">
-                      <i class="fa fa-folder-open" aria-hidden="true"></i> Expediente
-                    </h4>
-                  </div>
-                  <b-card v-if="expediente != null">
-                    <form>
-                      <div class="form-row">
-                        <div class="form-group col-md-3">
-                          <label class="text-info">Código</label>
-                          <label class="lbl-data" v-text="expediente.codigo"></label>
-                        </div>
-                        <div class="form-group col-md-9">
-                          <label class="text-info">Título Proyecto</label>
-                          <label class="lbl-data" v-text="expediente.titulo"></label>
-                        </div>
-                      </div>
-                      <div class="form-row">
-                        <div class="form-group col-md-6">
-                          <label class="text-info">Programa de estudios</label>
-                          <label class="lbl-data" v-text="expediente.escuela"></label>
-                        </div>
-                        <div class="form-group col-md-6">
-                          <label class="text-info">Fecha de inicio de trámite</label>
-                          <label class="lbl-data" v-text="expediente.fing"></label>
-                        </div>
-                      </div>
-                    </form>
-                  </b-card>
-                </b-tab>
-                <b-tab title="Graduando">
-                  <!-- Información graduando -->
-                  <div class="mb-3">
-                    <h4 class="text-info text-center">
-                      <i class="fa fa-user" aria-hidden="true"></i> Graduando
-                    </h4>
-                  </div>
+                <b-tab title="Graduando">                                    
                   <b-card v-if="graduando != null">
                     <form>
                       <div class="form-row">
@@ -93,13 +55,47 @@
                     </form>
                   </b-card>
                 </b-tab>
-                <b-tab title="Documentos">
-                  <!-- Información todos archivos -->
-                  <div class="mb-3">
-                    <h4 class="text-info text-center">
-                      <i class="fa fa-files-o" aria-hidden="true"></i> Archivos
-                    </h4>
-                  </div>
+                <b-tab title="Expediente">                               
+                  <b-card v-if="expediente != null">
+                    <form>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <label class="text-info">Código</label>
+                          <label class="lbl-data" v-text="expediente.codigo"></label>
+                        </div>
+                        <div class="form-group col-md-8">
+                          <label class="text-info">Título Proyecto</label>
+                          <label class="lbl-data" v-text="expediente.titulo"></label>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <label class="text-info">Fecha de creación</label>
+                          <label class="lbl-data" v-text="expediente.fing"></label>
+                        </div>
+                        <div class="form-group col-md-8">
+                          <label class="text-info">Programa de estudios</label>
+                          <label class="lbl-data" v-text="expediente.escuela"></label>
+                        </div>                                                                        
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-4">
+                          <label class="text-info">Fecha primera matrícula</label>
+                          <label class="lbl-data" v-text="expediente.fecha_primera_matricula"></label>
+                        </div>                        
+                        <div class="form-group col-md-4">
+                          <label class="text-info">Fecha máxima de evaluación</label>
+                          <label class="lbl-data" v-text="expediente.max_fecha_evaluacion"></label>
+                        </div>                        
+                        <div class="form-group col-md-4">
+                          <label class="text-info">Créditos</label>
+                          <label class="lbl-data" v-text="expediente.creditos"></label>
+                        </div>                                                                        
+                      </div>
+                    </form>
+                  </b-card>
+                </b-tab>                
+                <b-tab title="Documentos">                                    
                   <form ref="show_file" :action="url_show_file" target="my-frame" method="post">
                     <input type="hidden" name="file_id" />
                   </form>
@@ -133,11 +129,7 @@
           <b-tab title="Procedencia" v-if="movimiento != null">
             <b-card no-body>
               <b-tabs card active-nav-item-class="font-weight-bold text-uppercase text-danger">
-                <b-tab title="Estado de expediente">
-                  <!-- Información procedimiento origen -->
-                  <div class="mb-3">
-                    <h4 class="text-info text-center">Estado de expediente</h4>
-                  </div>
+                <b-tab title="Estado de expediente">                 
                   <b-row class="justify-content-lg-center">
                     <b-col col lg="10">
                       <table class="table table-bordered table-borderless">
@@ -177,13 +169,7 @@
                     </b-col>
                   </b-row>
                 </b-tab>
-                <b-tab title="Archivos adjuntos" v-if="array_archivo_ultimo.length > 0">
-                  <!-- Archivos procedimiento origen -->
-                  <div class="mb-4">
-                    <h4 class="text-info text-center">
-                      <i class="fa fa-files-o" aria-hidden="true"></i> Archivos adjuntos
-                    </h4>
-                  </div>
+                <b-tab title="Archivos adjuntos" v-if="array_archivo_ultimo.length > 0">                                    
                   <form
                     ref="show_file_ultimo"
                     :action="url_show_file"
@@ -391,9 +377,9 @@ export default {
 
       this.axios
         .post(`${this.url}/Expediente/getExpById`, formData)
-        .then(response => {
+        .then(response => {          
           if (!response.data.error) {
-            this.expediente = response.data.expediente;
+            this.expediente = response.data.expediente;            
           } else {
             console.log(response.data.message)
           }

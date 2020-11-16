@@ -208,7 +208,7 @@ class Expediente {
 				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_E.facu
 				WHERE GT_E.id = $this->id";*/
 		
-		$sql = "SELECT GT_E.*, AC_G.grad_cred AS creditos, AC_E.nesc AS escuela, AC_F.nfac AS facultad
+		$sql = "SELECT GT_E.*, AC_E.nesc AS escuela, AC_F.nfac AS facultad, GT_G.cui, AC_G.grad_cred AS creditos
 				FROM gt_expediente AS GT_E
 					INNER JOIN gt_graduando_expediente AS GT_GE ON GT_GE.idexpediente = GT_E.id
 					INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando					
@@ -221,7 +221,58 @@ class Expediente {
   
 		$result_query = mysqli_query($this->conn, $sql);
   
-		$row = $result_query->fetch_assoc();      
+		if ( $row = $result_query->fetch_assoc() ) {
+			$cui = $row['cui'];
+			$acdlnues = 'acdl' . $row['nues'];
+			$acdhnues = 'acdh' . $row['nues'];
+
+			$sql2 = "SELECT DATE_FORMAT(MAX(fech), '%d-%m-%Y') AS max_fecha_evaluacion
+					 FROM ( SELECT * 
+					        FROM $acdlnues 
+							WHERE cui='$cui' 
+							UNION 
+							SELECT * 
+							FROM $acdhnues
+							WHERE cui='$cui' ) as tabla 
+					 WHERE anoh = (
+							SELECT max(anoh) 
+							FROM (SELECT anoh 
+									FROM $acdlnues
+									WHERE cui='20002728' 
+									UNION 
+								  SELECT anoh 
+								  FROM $acdhnues
+								  WHERE cui='$cui') as subtabla ) 
+					  AND fech <> ''";
+
+            $result_query2 = mysqli_query($this->conn, $sql2);           
+
+            if ( $row2 = $result_query2->fetch_assoc() ) {
+                $row['max_fecha_evaluacion'] = $row2['max_fecha_evaluacion'];                
+			}
+			
+			$sql3 = "SELECT DATE_FORMAT(MIN(fdig), '%d-%m-%Y') AS fecha_primera_matricula
+					FROM
+					(
+						SELECT * FROM $acdlnues WHERE cui='$cui'
+						UNION
+						SELECT * FROM $acdhnues WHERE cui='$cui'
+					) AS tabla
+					WHERE SUBSTRING(casi,4,1)=1
+					AND anoh = (SELECT min(anoh)
+									FROM (SELECT anoh FROM $acdlnues WHERE cui='$cui'
+											UNION
+											SELECT anoh FROM $acdhnues WHERE cui='$cui'
+										) AS subtabla
+								)
+					AND anoh >= 1995 AND fdig<>''";
+
+            $result_query3 = mysqli_query($this->conn, $sql3);           
+
+            if ( $row3 = $result_query3->fetch_assoc() ) {
+                $row['fecha_primera_matricula'] = $row3['fecha_primera_matricula'];                
+            }
+		}      
   
 		$result['expediente'] = $row;      
   
