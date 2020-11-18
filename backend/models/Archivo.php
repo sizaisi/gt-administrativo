@@ -91,8 +91,7 @@ class Archivo extends Recurso {
 											AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1 
 											ORDER BY GT_M.id desc limit 1
 								  		) 
-				ORDER BY GT_RE.id ASC";				
-		
+				ORDER BY GT_RE.id ASC";			
 		
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -178,7 +177,7 @@ class Archivo extends Recurso {
 		return $result;
 	 }
   
-	 public function eliminar(){
+	 public function eliminar() {
 
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
@@ -187,14 +186,14 @@ class Archivo extends Recurso {
 		$result_query = mysqli_query($this->conn, $sql);     	
 		
 		if (!$result_query) {
-		   	$result['error'] = true;                    
+		   	$result['error'] = true;                  
 		}       	
 		
 		$sql = "DELETE FROM gt_recurso where id = $this->id AND idmovimiento IS NULL";
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {
-			$result['error'] = true;                	       
+			$result['error'] = true;              	       
 		} 	
 
 		if (mysqli_affected_rows($this->conn) == 0) { //no debe eliminar si el recurso ya tiene movimiento
@@ -212,6 +211,6 @@ class Archivo extends Recurso {
   
 		$this->conn->autocommit(TRUE); //finalizar transaccion
   
-		return $result; 		
+		return $result;
 	 }
 }

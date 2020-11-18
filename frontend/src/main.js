@@ -38,6 +38,26 @@ Vue.use(IconsPlugin)
 Vue.component('v-select', vSelect)
 Vue.component('multiselect', Multiselect)
 
+/************************ Configuración de log ***********************/
+import VueLogger from 'vuejs-logger';
+const isProduction = process.env.NODE_ENV === 'production';
+ 
+const options = {
+    isEnabled: true,
+    logLevel : isProduction ? 'error' : 'debug',
+    stringifyArguments : false,
+    showLogLevel : true,
+    showMethodName : true,
+    separator: '|',
+    showConsoleColors: true
+};
+ 
+Vue.use(VueLogger, options);
+/*********************************************************************/
+
+
+
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'

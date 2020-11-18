@@ -43,7 +43,7 @@ export default {
             return Array.from(Array(Math.ceil(this.array_grado_modalidad.length / this.itemsPerRow)).keys())
         }
     },
-    mounted: function() {                           
+    created() {                           
         this.getGradoModalidad()            
     },
     methods: {                        

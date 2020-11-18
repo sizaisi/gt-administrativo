@@ -252,7 +252,7 @@ export default {
           if (value) {
             this.axios
               .post(`${this.url}/Archivo/delete`, formData)
-              .then(function (response) {
+              .then(function (response) {                                                 
                 me.resetearValores();
                 if (!response.data.error) {
                   me.$root.mostrarNotificacion(
