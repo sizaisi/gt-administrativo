@@ -105,14 +105,24 @@ class Usuario
 	{
 		$result = array('error' => false);
 
+		$sql = "SELECT ac_d.depa 
+				FROM gt_expediente AS gt_e 
+				INNER JOIN actescu ac_e ON gt_e.nues = ac_e.nues 
+				INNER JOIN actdepa ac_d ON ac_e.facu = ac_d.facu
+				WHERE gt_e.id = $idexpediente";
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		$array_depa = array();
+
+		while ($row = $result_query->fetch_assoc()) {
+			$array_depa[] = "'" . $row['depa'] . "'";
+		}
+
 		$sql = "SELECT gt_u.id, REPLACE(ac_doc.apn, '/', ' ') AS apn, ac_doc.dic AS nro_documento 
 				FROM gt_usuario AS gt_u 
 				INNER JOIN SIAC_DOC AS ac_doc ON gt_u.codi_usuario = ac_doc.codper 			    
-				WHERE ac_doc.depend IN (SELECT ac_d.depa 
-										FROM gt_expediente AS gt_e 
-										INNER JOIN actescu ac_e ON gt_e.nues = ac_e.nues 
-										INNER JOIN actdepa ac_d ON ac_e.facu = ac_d.facu
-										WHERE gt_e.id = $idexpediente) 
+				WHERE ac_doc.depend IN (" . implode(',', $array_depa)  . ") 
 				AND ac_doc.esta_doc = 'A' 
 				ORDER BY ac_doc.apn ASC";
 

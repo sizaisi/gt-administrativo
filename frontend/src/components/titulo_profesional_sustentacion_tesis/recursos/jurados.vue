@@ -96,7 +96,7 @@ export default {
         let me = this       
         let formData = this._toFormData({
             idexpediente: this.expediente.id
-        })
+        })        
 
         this.axios.post(`${this.url}/Usuario/getDocentes`, formData)
         .then(function(response) {
