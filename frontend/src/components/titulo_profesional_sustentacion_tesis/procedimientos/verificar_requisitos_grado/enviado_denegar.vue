@@ -75,6 +75,9 @@ export default {
             errors: [], 
         }
     },
+    created() {     
+        this.verificarRecursoRutasVecinas()                      
+    },     
     methods: {            
         prevTab() {
             this.errors = [] 
@@ -107,39 +110,24 @@ export default {
 
             return false
         },
-        //verifica si las rutas vecinas de este procedimiento se registro observaciones, archivos o personas sin confirmar
-        verificarRecursoRutasVecinas() { 
-            let me = this      
-            var formData = this._toFormData({
-                idexpediente: this.expediente.id,
-                idgrado_proc: this.grado_procedimiento.id,
-                idusuario: this.usuario.id,
-                idruta: this.ruta.id
-            })
+        verificarRecursoRutasVecinas() {             
+            let formData = new FormData()
+            formData.append('idexpediente', this.expediente.id)
+            formData.append('idgrado_proc', this.grado_procedimiento.id)
+            formData.append('idusuario', this.usuario.id)
+            formData.append('idruta', this.ruta.id)            
 
             this.axios.post(`${this.url}/Recurso/verify`, formData)
-            .then(function(response) {                                
+            .then(response => {                                
                 if (!response.data.error) {                
-                    me.existeRecursoRutaVecinas = response.data.existeRecursoRutaVecinas
+                    this.existeRecursoRutaVecinas = response.data.existeRecursoRutaVecinas
                 }
                 else {                
                     console.log(response.data.message)      
                 }
             })  
-        },                
-        _toFormData(obj) {
-            var fd = new FormData()
-
-            for (var i in obj) {
-            fd.append(i, obj[i])
-            }
-
-            return fd
-        },                               
-    },
-    mounted: function() {     
-        this.verificarRecursoRutasVecinas()                      
-    },     
+        },                                                       
+    }    
 }
 </script>
 <style scoped>

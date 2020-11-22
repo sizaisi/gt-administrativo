@@ -75,6 +75,16 @@ export default {
             errors: [],                                 
         }
     },
+    filters: {
+        capitalize: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+    },
+    created() {                                 
+        this.getObservaciones()
+    },
     methods: {    
         cantidadObservaciones() {
             return this.array_observaciones.length
@@ -90,23 +100,21 @@ export default {
                 this.actualizarObservaciones()
             }            
         },         
-        getObservaciones() {
-            let me = this      
-            var formData = this._toFormData({
-                idgrado_proc: this.idgrado_proc,
-                idusuario: this.idusuario,
-                idexpediente: this.expediente.id
-            })
+        getObservaciones() {            
+            let formData = new FormData()
+            formData.append('idexpediente', this.expediente.id)
+            formData.append('idusuario', this.idusuario)
+            formData.append('idgrado_proc', this.idgrado_proc)            
 
             this.axios.post(`${this.url}/Observaciones/show`, formData)
-            .then(function(response) {                
-                if (!response.data.error) {                
-                    me.array_observaciones = response.data.array_observaciones
-                }
-                else {                
-                    console.log(response.data.message)      
-                }
-            })    
+                .then(response => {                
+                    if (!response.data.error) {                
+                        this.array_observaciones = response.data.array_observaciones
+                    }
+                    else {                
+                        console.log(response.data.message)      
+                    }
+                })    
         },  
         registrarObservaciones() {   
             this.errors = []
@@ -116,24 +124,22 @@ export default {
               return
             }        
 
-            let me = this        
-            let formData = this._toFormData({              
-              idexpediente: this.expediente.id,
-              idgrado_proc: this.idgrado_proc,
-              idusuario: this.idusuario,                  
-              idruta: this.ruta.id,
-              descripcion: this.observacion.descripcion,
-            })  
+            let formData = new FormData()
+            formData.append('idexpediente', this.expediente.id)
+            formData.append('idgrado_proc', this.idgrado_proc)
+            formData.append('idusuario', this.idusuario)
+            formData.append('idruta', this.ruta.id)
+            formData.append('descripcion', this.observacion.descripcion)            
 
             this.axios.post(`${this.url}/Observaciones/store`, formData)
-              .then(function(response) {                        
-                  me.resetearValores()
+              .then(response => {                        
+                  this.resetearValores()
                   if (!response.data.error) {                                              
-                    me.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
-                    me.getObservaciones()                           
+                    this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                    this.getObservaciones()                           
                   }
                   else {
-                    me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                    this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
                   }                      
             })                        
         },
@@ -143,31 +149,27 @@ export default {
             if (this.observacion.descripcion.length < 30) {              
               this.errors.push("Debe ingresar al menos 30 caracteres.")
               return
-            }                   
-
-            let me = this        
-            let formData = this._toFormData({
-              id: this.observacion.id,              
-              descripcion: this.observacion.descripcion,              
-            })  
+            }       
+            
+            let formData = new FormData()
+            formData.append('id', this.observacion.id)
+            formData.append('descripcion', this.observacion.descripcion)
 
             this.axios.post(`${this.url}/Observaciones/update`, formData)
-              .then(function(response) {    
-                  me.resetearValores()                                                                      
+              .then(response => {    
+                  this.resetearValores()                                                                      
                   if (!response.data.error) {                        
-                    me.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
-                    me.getObservaciones()                           
+                    this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                    this.getObservaciones()                           
                   }
                   else {
-                    me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                    this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
                   }                      
             })    
         },
-        eliminarObservaciones(id) {        
-            let me = this                    
-            let formData = this._toFormData({
-              id: id,              
-            })  
+        eliminarObservaciones(id) {    
+            let formData = new FormData()
+            formData.append('id', id)                
 
             this.$bvModal.msgBoxConfirm(
               '¿Seguro que quieres eliminar estas observaciones?', {
@@ -180,14 +182,14 @@ export default {
             .then(value => {
                 if (value) {        
                     this.axios.post(`${this.url}/Observaciones/delete`, formData)
-                    .then(function(response) {                                       
-                        me.resetearValores()
+                    .then(response => {                                       
+                        this.resetearValores()
                         if (!response.data.error) {
-                            me.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
-                            me.getObservaciones()                            
+                            this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                            this.getObservaciones()                            
                         }
                         else {
-                            me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                            this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
                         }
                     })                
                 }
@@ -196,27 +198,8 @@ export default {
         resetearValores() {                
             this.observacion.id = null
             this.observacion.descripcion = ''                                                    
-        },
-        _toFormData(obj) {
-            var fd = new FormData()
-
-            for (var i in obj) {
-                fd.append(i, obj[i])
-            }
-
-            return fd
-        },      
-    },
-    filters: {
-        capitalize: function (value) {
-            if (!value) return ''
-            value = value.toString()
-            return value.charAt(0).toUpperCase() + value.slice(1)
-        }
-    },
-    mounted: function() {                                 
-        this.getObservaciones()                 
-    },
+        },        
+    }    
 }
 </script>
 <style scoped>

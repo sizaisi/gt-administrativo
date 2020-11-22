@@ -74,33 +74,6 @@ export default {
       estados : this.$root.estados,  
     }
   },
-  methods: {              
-    getRutas() {
-        let me = this
-        var formData = this._toFormData({
-            idgradproc_origen: this.grado_procedimiento.id,            
-        })        
-
-        this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)
-        .then(function(response) {          
-          if (!response.data.error) {              
-              me.array_ruta = response.data.array_ruta                             
-          }
-          else {              
-              console.log(response.data.message)
-          }
-        })   
-    },                  
-    _toFormData(obj) {
-        var fd = new FormData()
-
-        for (var i in obj) {
-          fd.append(i, obj[i])
-        }
-
-        return fd
-    }    
-  },  
   filters: {
     capitalize: function (value) {
       if (!value) return ''
@@ -109,9 +82,25 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
-  mounted: function() {       
+  created() {       
     this.getRutas()                                  
   },
+  methods: {              
+    getRutas() {
+        let formData = new FormData()
+        formData.append('idgradproc_origen', this.grado_procedimiento.id)           
+
+        this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)
+        .then(response => {          
+          if (!response.data.error) {              
+              this.array_ruta = response.data.array_ruta                             
+          }
+          else {              
+              console.log(response.data.message)
+          }
+        })   
+    },                       
+  }  
 }
 </script>
 <style scoped>

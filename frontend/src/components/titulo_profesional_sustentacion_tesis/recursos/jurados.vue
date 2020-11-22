@@ -88,80 +88,75 @@ export default {
         errors: [],        
     }
   },
+  created() {            
+    this.getCandidatosJurados()  
+    this.getJurados()                  
+  },
   methods: {   
     cantidadJurados() {
         return this.array_jurado.length
     },         
-    getCandidatosJurados() { // para mostrar una lista de asesores por facultad para que ser asignado        
-        let me = this       
-        let formData = this._toFormData({
-            idexpediente: this.expediente.id
-        })        
+    getCandidatosJurados() {
+        let formData = new FormData()
+        formData.append('idexpediente', this.expediente.id)          
 
         this.axios.post(`${this.url}/Usuario/getDocentes`, formData)
-        .then(function(response) {
-            if (!response.data.error) {
-                me.array_docente = response.data.array_docente                                                                                                
-            }
-            else {
-                console.log(response.data.message)
-            }
-        })
-    },           
-    getJurados() { 
-        let me = this      
-        let formData = this._toFormData({
-            idexpediente: this.expediente.id,
-            idgrado_proc: this.idgrado_proc,
-            idusuario: this.idusuario,                                
-        })
-
-        this.axios.post(`${this.url}/Persona/get_jurado`, formData)
-        .then(function(response) {            
-            if (!response.data.error) {
-                me.array_jurado = response.data.array_jurado  
-
-                for (var i in me.array_jurado) {                        
-                    //deshabilitar los tipos jurados registrados 
-                    me.deshabilitarTipoJurado(me.array_jurado[i].tipo) 
-                }                                   
-            }
-            else {
-                console.log(response.data.message)      
-            }
-        })   
-    },        
-    registrarJurado() {                        
-        let me = this
-        let formData = this._toFormData({              
-            idexpediente: this.expediente.id,
-            idgrado_proc: this.idgrado_proc,
-            idusuario: this.idusuario,                  
-            idruta: this.ruta.id,
-            iddocente: this.iddocente,
-            tipo: this.tipo
-        })
-
-        this.axios.post(`${this.url}/Persona/store`, formData)
-            .then(function(response) {
-                me.resetearValores()                                   
-                if (!response.data.error) {                        
-                    me.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
-                    me.getJurados()
+            .then(response => {
+                if (!response.data.error) {
+                    this.array_docente = response.data.array_docente                                                                                                
                 }
                 else {
-                    me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')                                                                                    
+                    console.log(response.data.message)
+                }
+            })
+    },           
+    getJurados() {         
+        let formData = new FormData()
+        formData.append('idexpediente', this.expediente.id)   
+        formData.append('idgrado_proc', this.idgrado_proc)   
+        formData.append('idusuario', this.idusuario)   
+
+        this.axios.post(`${this.url}/Persona/get_jurado`, formData)
+            .then(response => {            
+                if (!response.data.error) {
+                    this.array_jurado = response.data.array_jurado  
+
+                    for (var i in this.array_jurado) {                                            
+                        this.deshabilitarTipoJurado(this.array_jurado[i].tipo) 
+                    }                                   
+                }
+                else {
+                    console.log(response.data.message)      
+                }
+            })   
+    },        
+    registrarJurado() {            
+        let formData = new FormData()
+        formData.append('idexpediente', this.expediente.id)               
+        formData.append('idgrado_proc', this.idgrado_proc)    
+        formData.append('idusuario', this.idusuario)    
+        formData.append('idruta', this.ruta.id)    
+        formData.append('iddocente', this.iddocente)    
+        formData.append('tipo', this.tipo)            
+
+        this.axios.post(`${this.url}/Persona/store`, formData)
+            .then(response => {
+                this.resetearValores()                                   
+                if (!response.data.error) {                        
+                    this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                    this.getJurados()
+                }
+                else {
+                    this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')                                                                                    
                 }                      
             })           
     },    
-    eliminarJurado(id, tipo) {        
-        let me = this        
-        let formData = this._toFormData({
-            id: id,          
-            idexpediente: this.expediente.id,
-            idgrado_proc: this.idgrado_proc,              
-            tipo: tipo
-        }) 
+    eliminarJurado(id, tipo) {                
+        let formData = new FormData()
+        formData.append('id', id)  
+        formData.append('idexpediente', this.expediente.id)  
+        formData.append('idgrado_proc', this.idgrado_proc)  
+        formData.append('tipo', tipo)                  
 
         this.$bvModal.msgBoxConfirm(
           '¿Esta seguro de eliminar el jurado seleccionado?', {
@@ -174,22 +169,22 @@ export default {
           .then(value => {
             if (value) {        
                 this.axios.post(`${this.url}/Persona/delete`, formData)
-                .then(function(response) {    
-                    me.resetearValores()                              
+                .then(response => {    
+                    this.resetearValores()                              
                     if (!response.data.error) {
-                        me.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
-                        me.habilitarTipoJurado(tipo)                            
-                        me.getJurados()
+                        this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                        this.habilitarTipoJurado(tipo)                            
+                        this.getJurados()
                     }
                     else {
-                        me.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right') 
+                        this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right') 
                     }
                 })                
             }
         })                  
     },
     habilitarTipoJurado(tipo) {
-        for (var i in this.jurado_tipo) {
+        for (let i in this.jurado_tipo) {
             if (this.jurado_tipo[i].value == tipo) {
                 this.jurado_tipo[i].disabled = false                     
                 break
@@ -197,7 +192,7 @@ export default {
         }                             
     },
     deshabilitarTipoJurado(tipo) {
-        for (var i in this.jurado_tipo) {
+        for (let i in this.jurado_tipo) {
             if (this.jurado_tipo[i].value == tipo) {
                 this.jurado_tipo[i].disabled = true                     
                 break
@@ -208,21 +203,8 @@ export default {
         this.iddocente = null          
         this.tipo = null                 
         this.errors = []                        
-    },    
-    _toFormData(obj) {
-        var fd = new FormData()
-
-        for (var i in obj) {
-          fd.append(i, obj[i])
-        }
-
-        return fd
     },        
-  },  
-  mounted: function() {            
-    this.getCandidatosJurados()  
-    this.getJurados()                  
-  },
+  }  
 }
 </script>
 <style scoped>

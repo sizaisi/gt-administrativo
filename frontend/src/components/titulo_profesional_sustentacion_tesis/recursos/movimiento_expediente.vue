@@ -32,8 +32,15 @@ export default {
             estados : this.$root.estados
         }
     },
+    filters: {
+        capitalize: function (value) {
+            if (!value) return ''
+            value = value.toString()
+            return value.charAt(0).toUpperCase() + value.slice(1)
+        }
+    },    
     methods: {                    
-        mover(ruta) { // movimiento para derivar el expediente al siguiente procedimiento
+        mover(ruta) {
             this.$bvModal.msgBoxConfirm(
                 '¿Seguro que quiere ' + ruta.etiqueta + ' este expediente?', {
                 title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1) + ' Expediente',                    
@@ -43,54 +50,34 @@ export default {
                 centered: true
             }).then(value => {
                 if (value) {
-                    let me = this                               
-                    let formData = this._toFormData({
-                        idexpediente: this.expediente.id,
-                        idusuario: this.usuario.id,
-                        idruta: ruta.id,
-                        idgradproc_origen: ruta.idgradproc_origen,
-                        idgradproc_destino: ruta.idgradproc_destino,
-                        idmov_anterior : this.movimiento.id,
-                        estado_expediente: this.estados[ruta.etiqueta]
-                    })                                    
+                    let formData = new FormData()
+                    formData.append('idexpediente', this.expediente.id)  
+                    formData.append('idusuario', this.usuario.id)
+                    formData.append('idruta', ruta.id)
+                    formData.append('idgradproc_origen', ruta.idgradproc_origen)
+                    formData.append('idgradproc_destino', ruta.idgradproc_destino)
+                    formData.append('idmov_anterior', this.movimiento.id)
+                    formData.append('estado_expediente', this.estados[ruta.etiqueta])                                 
 
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
-                    .then(function(response) {                                          
-                        if (!response.data.error) {
-                            me.$root.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
-                            me.$router.push({name: 'bandeja',                   
-                                                params: { 
-                                                    usuario: me.usuario,
-                                                    grado_modalidad: me.grado_modalidad, 
-                                                    grado_procedimiento: me.grado_procedimiento,                                                     
-                                                }
-                                            })                  
-                        }
-                        else {                           
-                            me.$root.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
-                        }
-                    }) 
+                        .then(response => {                                          
+                            if (!response.data.error) {
+                                this.$root.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
+                                this.$router.push({name: 'bandeja',                   
+                                                    params: { 
+                                                        usuario: this.usuario,
+                                                        grado_modalidad: this.grado_modalidad, 
+                                                        grado_procedimiento: this.grado_procedimiento,                                                     
+                                                    }
+                                                })                  
+                            }
+                            else {                           
+                                this.$root.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
+                            }
+                        }) 
                 }                   
             })              
-        },                
-        _toFormData(obj) {
-            var fd = new FormData()
-
-            for (var i in obj) {
-                fd.append(i, obj[i])
-            }
-
-            return fd
-        },      
-    },
-    filters: {
-        capitalize: function (value) {
-            if (!value) return ''
-            value = value.toString()
-            return value.charAt(0).toUpperCase() + value.slice(1)
-        }
-    },
-    mounted: function() {                   
-    },
+        },                             
+    }    
 }
 </script>
