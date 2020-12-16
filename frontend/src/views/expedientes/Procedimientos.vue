@@ -4,7 +4,7 @@
         v-text="grado_modalidad.nombre_grado_titulo + ' - ' + grado_modalidad.nombre_modalidad_obtencion + ': Procedimientos'">
     </h5>
     <div class="text-center mt-3">                           
-    <b-button :to="{ name: 'inicio', params: { grado_modalidad: grado_modalidad } }" variant="outline-info"> 
+    <b-button :to="{ name: 'inicio' }" variant="outline-info"> 
         <b-icon icon="arrow-left-short"></b-icon> Atras
     </b-button>
     </div> 
@@ -15,16 +15,8 @@
             <h2 v-if="grado_procedimiento.total_expedientes == 0" class="timer count-title count-number" v-text="grado_procedimiento.total_expedientes"></h2>      
             <h2 v-else class="timer count-title count-number text-danger" v-text="grado_procedimiento.total_expedientes"></h2>
             <p class="count-text">Solicitudes pendientes</p><br>               
-            <b-button 
-                pill 
-                variant="info"                   
-                :to="{ name: 'bandeja', 
-                        params: {                                                         
-                            grado_modalidad: grado_modalidad,
-                            grado_procedimiento: grado_procedimiento
-                        } 
-                }">
-                    Ver expedientes
+            <b-button pill variant="info" @click="mostrarBandeja(grado_procedimiento)">
+                Ver expedientes
             </b-button>
         </div>
         </div>                            
@@ -33,14 +25,11 @@
 </template>
 <script>
 export default {
-    name: 'procedimientos',     
-    props: {            
-        grado_modalidad: Object                
-    },    
+    name: 'procedimientos',           
     data() {
         return {                               
-            url: this.$root.API_URL,
-            usuario: this.$store.state.usuario,
+            url: this.$root.API_URL,            
+            grado_modalidad: this.$store.getters.getGradoModalidad,
             array_grado_procedimiento : [],                         
             itemsPerRow: 3
         }
@@ -48,7 +37,7 @@ export default {
     computed: {
         objectGroups () {
             return Array.from(Array(Math.ceil(this.array_grado_procedimiento.length / this.itemsPerRow)).keys())
-        }
+        },        
     },
     created() {                           
         if (this.grado_modalidad != null) {
@@ -59,13 +48,14 @@ export default {
         }                
     },
     methods: {                
-        getGradoProcedimientos() {                       
+        getGradoProcedimientos() {        
+            let usuario = this.$store.getters.getUsuario               
             let formData = new FormData()
             formData.append('idgrado_modalidad', this.grado_modalidad.id)
-            formData.append('idrol_area', this.usuario.idrol_area)
-            formData.append('idusuario', this.usuario.id)
-            formData.append('codi_usuario', this.usuario.codi_usuario)
-            formData.append('tipo_usuario', this.usuario.tipo)        
+            formData.append('idrol_area', usuario.idrol_area)
+            formData.append('idusuario', usuario.id)
+            formData.append('codi_usuario', usuario.codi_usuario)
+            formData.append('tipo_usuario', usuario.tipo)        
             
             this.axios.post(`${this.url}/GradoProcedimiento/gradoProcedimientos`, formData)
             .then(response => {            
@@ -76,7 +66,11 @@ export default {
                     console.log(response.data.message)
                 }
             })
-        },           
+        },   
+        mostrarBandeja(grado_procedimiento) {
+            this.$store.dispatch('setGradoProcedimiento', grado_procedimiento)   
+            this.$router.push( { name: "bandeja" } );
+        }        
     }    
 }
 </script>

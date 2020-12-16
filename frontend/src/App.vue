@@ -32,8 +32,7 @@ export default {
       return {                               
         url: this.$root.API_URL,            
         codi_usuario: null,
-        codi_menu_grup: null,            
-        usuario : null,      
+        codi_menu_grup: null,                         
         array_menu: [],
       }
     },
@@ -61,8 +60,8 @@ export default {
         this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
         .then(response => {                
             if (!response.data.error) {
-                this.usuario = response.data.usuario     
-                this.$store.dispatch('setUsuario', this.usuario)                                                 
+                let usuario = response.data.usuario                     
+                this.$store.dispatch('setUsuario', usuario)
                 this.getMenus()                
             }
             else {                                        

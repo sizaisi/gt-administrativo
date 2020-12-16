@@ -12,15 +12,8 @@
             <h5 class="count-text-title" v-text="grado_modalidad.nombre_grado_titulo+' - '+grado_modalidad.nombre_modalidad_obtencion"></h5>               
             <h2 class="timer count-title count-number text-danger" v-text="grado_modalidad.total_expedientes"></h2>      
             <p class="count-text">Solicitudes pendientes</p><br>               
-            <b-button 
-                pill 
-                variant="info"                   
-                :to="{ name: 'procedimientos', 
-                        params: {                                                         
-                            grado_modalidad: grado_modalidad                                
-                        } 
-                }">
-                    Ver procedimientos
+            <b-button pill variant="info" @click="mostrarProcedimientos(grado_modalidad)">
+                Ver procedimientos
             </b-button>
         </div>
         </div>                            
@@ -32,8 +25,7 @@ export default {
     name: 'inicio',         
     data() {
         return {                               
-            url: this.$root.API_URL,
-            usuario: this.$store.state.usuario,
+            url: this.$root.API_URL,                        
             array_grado_modalidad : [],                         
             itemsPerRow: 3
         }
@@ -47,10 +39,12 @@ export default {
         this.getGradoModalidad()            
     },
     methods: {                        
-        getGradoModalidad() {               
+        getGradoModalidad() {             
+            let usuario = this.$store.getters.getUsuario
             let formData = new FormData()
-            formData.append('codi_usuario', this.usuario.codi_usuario)
-            formData.append('idrol_area', this.usuario.idrol_area)             
+
+            formData.append('codi_usuario', usuario.codi_usuario)
+            formData.append('idrol_area', usuario.idrol_area)             
 
             this.axios.post(`${this.url}/GradoModalidad/inicio`, formData)
             .then(response => {                              
@@ -61,7 +55,11 @@ export default {
                     console.log(response.data.message)
                 }
             })
-        },                      
+        },  
+        mostrarProcedimientos(grado_modalidad) {
+            this.$store.dispatch('setGradoModalidad', grado_modalidad)   
+            this.$router.push( { name: "procedimientos" } );
+        }
     },    
 }
 </script>

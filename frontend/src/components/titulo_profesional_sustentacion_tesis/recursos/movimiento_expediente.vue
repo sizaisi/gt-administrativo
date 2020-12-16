@@ -62,17 +62,11 @@ export default {
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
                         .then(response => {                                          
                             if (!response.data.error) {
-                                this.$root.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
-                                this.$router.push({name: 'bandeja',                   
-                                                    params: { 
-                                                        usuario: this.usuario,
-                                                        grado_modalidad: this.grado_modalidad, 
-                                                        grado_procedimiento: this.grado_procedimiento,                                                     
-                                                    }
-                                                })                  
+                                this.$root.successAlert(response.data.message)
+                                this.$router.push({name: 'bandeja'})                  
                             }
                             else {                           
-                                this.$root.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
+                                this.$root.errorAlert(response.data.message)
                             }
                         }) 
                 }                   

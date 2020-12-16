@@ -41,10 +41,7 @@ import derivado_finalizar from './derivado_finalizar.vue'
 
 export default {  
   name: 'index',  
-  props: {
-    grado_modalidad: Object,
-    grado_procedimiento: Object,    
-    usuario: Object,      
+  props: {      
     expediente: Object,
     graduando: Object,
     movimiento: Object,
@@ -54,8 +51,10 @@ export default {
   },
   data() {
     return {             
-      url: this.$root.API_URL,                 
-      array_ruta : [],   
+      url: this.$root.API_URL,       
+      usuario: this.$store.getters.getUsuario,
+      grado_modalidad: this.$store.getters.getGradoModalidad,
+      grado_procedimiento: this.$store.getters.getGradoProcedimiento,                                  
       ruta_seleccionada: null,      
       estados : this.$root.estados,  
     }
@@ -68,24 +67,15 @@ export default {
       return value.charAt(0).toUpperCase() + value.slice(1)
     }
   },
-  created() {       
-    this.getRutas()                                  
+  computed: {
+    array_ruta() {
+      return this.$store.state.rutas
+    }
   },
-  methods: {              
-    getRutas() {        
-        let formData = new FormData()
-        formData.append('idgradproc_origen', this.grado_procedimiento.id)        
-
-        this.axios.post(`${this.url}/Ruta/getRutasByProc`, formData)
-        .then(response => {          
-          if (!response.data.error) {              
-              this.array_ruta = response.data.array_ruta                             
-          }
-          else {              
-              console.log(response.data.message)
-          }
-        })   
-    },                      
+  created() {                          
+    this.$store.dispatch("getRutas");           
+  },    
+  methods: {                  
   }  
 }
 </script>

@@ -89,8 +89,9 @@ class Recurso {
 			}			
 		}
 		else {
-			$result['error'] = $sql;
-			$result['message'] = "No se pudo verificar recursos en rutas vecinas.";    
+			$result['error'] = true;
+			//$result['message'] = "No se pudo verificar recursos en rutas vecinas.";    
+			$result['message'] = $sql;    
 		}	      
   
 		return $result;

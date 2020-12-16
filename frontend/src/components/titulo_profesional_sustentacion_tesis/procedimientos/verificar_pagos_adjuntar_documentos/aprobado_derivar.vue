@@ -79,10 +79,7 @@ import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
     name: 'derivado-aprobar',
-    props: {
-        grado_modalidad: Object,
-        grado_procedimiento: Object,    
-        usuario: Object,                
+    props: {                    
         expediente: Object,
         graduando: Object,        
         ruta: Object,
@@ -95,6 +92,9 @@ export default {
     data() {
         return {             
             url: this.$root.API_URL,      
+            usuario: this.$store.getters.getUsuario,
+            grado_modalidad: this.$store.getters.getGradoModalidad,
+            grado_procedimiento: this.$store.getters.getGradoProcedimiento,                 
             tabIndex: 0,         
             tabIndex2: 0, 
             array_conceptos : [13, 27, 961],                
@@ -103,8 +103,7 @@ export default {
                 27: 'CONSTANCIA DE BIBLIOTECA',
                 961: 'CONSTANCIA PRIMERA MATRICULA PREGRADO'
             },
-            array_pagos : [],            
-            existeRecursoRutaVecinas : false, 
+            array_pagos : [],                        
             array_tipo_documento: [
                 { value: null, text: '--Seleccione tipo--', disabled: true },                
                 { value: 'Constancia de idiomas', text: 'Constancia de idiomas', disabled: false}, 
@@ -121,10 +120,15 @@ export default {
             isBusy: false,
         }
     },
-    created() {             
-        this.getPagos()          
-        this.verificarRecursoRutasVecinas()         
-    },     
+    computed: {
+        existeRecursoRutaVecinas() {
+            return this.$store.state.rutaVecinaActiva
+        }
+    },
+    created() {                          
+        this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id);           
+        this.getPagos()       
+    },    
     methods: {            
         prevTab() {
             this.errors = [] 
@@ -169,24 +173,7 @@ export default {
             }      
 
             return false
-        },
-        verificarRecursoRutasVecinas() {             
-            let formData = new FormData()
-            formData.append('idexpediente', this.expediente.id)
-            formData.append('idgrado_proc', this.grado_procedimiento.id)
-            formData.append('idusuario', this.usuario.id)
-            formData.append('idruta', this.ruta.id)            
-
-            this.axios.post(`${this.url}/Recurso/verify`, formData)
-            .then(response => {                                
-                if (!response.data.error) {                
-                    this.existeRecursoRutaVecinas = response.data.existeRecursoRutaVecinas
-                }
-                else {                
-                    console.log(response.data.message)      
-                }
-            })  
-        },           
+        },        
         getPagos() {     
             let formData = new FormData()
             formData.append('cui', this.graduando.cui)                   

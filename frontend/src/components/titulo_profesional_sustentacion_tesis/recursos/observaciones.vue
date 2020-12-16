@@ -135,11 +135,11 @@ export default {
               .then(response => {                        
                   this.resetearValores()
                   if (!response.data.error) {                                              
-                    this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                    this.$root.successAlert(response.data.message)
                     this.getObservaciones()                           
                   }
                   else {
-                    this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                    this.$root.errorAlert(response.data.message)
                   }                      
             })                        
         },
@@ -159,11 +159,11 @@ export default {
               .then(response => {    
                   this.resetearValores()                                                                      
                   if (!response.data.error) {                        
-                    this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                    this.$root.successAlert(response.data.message)
                     this.getObservaciones()                           
                   }
                   else {
-                    this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                    this.$root.errorAlert(response.data.message)
                   }                      
             })    
         },
@@ -185,11 +185,11 @@ export default {
                     .then(response => {                                       
                         this.resetearValores()
                         if (!response.data.error) {
-                            this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                            this.$root.successAlert(response.data.message)
                             this.getObservaciones()                            
                         }
                         else {
-                            this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                            this.$root.errorAlert(response.data.message)
                         }
                     })                
                 }

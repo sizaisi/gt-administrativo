@@ -78,32 +78,7 @@ class GradoProcedimiento {
 
 	function setDescripcion($descripcion) {
 		$this->descripcion = $descripcion;
-	}
-
-    public function getAllGradoProcedimiento(){
-        $result = array('error' => false);
-
-        $sql = "SELECT gt_gp.*, gt_gt.nombre AS gradname, gt_mo.nombre AS movname, 
-                       gt_p.nombre AS procname, gt_ra.nombre AS rolname, gt_gp.url_formulario 
-                FROM gt_grado_procedimiento AS gt_gp 
-                INNER JOIN gt_grado_modalidad AS gt_gm ON gt_gp.idgrado_modalidad = gt_gm.id 
-                INNER JOIN gt_grado_titulo AS gt_gt ON gt_gm.idgrado_titulo = gt_gt.id 
-                INNER JOIN gt_modalidad_obtencion AS gt_mo ON gt_gm.idmodalidad_obtencion = gt_mo.id 
-                INNER JOIN gt_procedimiento AS gt_p ON gt_gp.idprocedimiento = gt_p.id 
-                INNER JOIN gt_rol_area AS gt_ra ON gt_ra.id = gt_gp.idrol_area 
-                WHERE gt_gm.condicion = 1";
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $array_grado_procedimiento = array();
-
-        while ($row = $result_query->fetch_assoc()) {
-            array_push($array_grado_procedimiento, $row);
-        }
-
-        $result['array_grado_procedimiento'] = $array_grado_procedimiento;
-
-        return $result;
-    }
+	}   
 
     public function getGradoProcedimientos($idusuario, $codi_usuario, $tipo_usuario) {
 
@@ -189,105 +164,6 @@ class GradoProcedimiento {
         }
 
         $result['array_grado_procedimiento'] = $array_grado_procedimiento;        
-
-        return $result;
-    }
-
-    public function getListByIdGradoModalidad() { //obtener todos los grado procedimientos por idgradomodalidad
-
-        $result = array('error' => false);        
-        
-        $sql = "SELECT gt_gp.id AS idgradoproc, gt_p.nombre AS proc_nombre
-                FROM gt_grado_procedimiento AS gt_gp
-                INNER JOIN gt_procedimiento AS gt_p ON gt_gp.idprocedimiento = gt_p.id
-                WHERE gt_gp.condicion = 1 AND gt_gp.idgrado_modalidad = $this->idgrado_modalidad
-                ORDER BY gt_p.nombre ASC";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        $array_grado_procedimiento = array();
-
-        while ($row = $result_query->fetch_assoc()) {
-            array_push($array_grado_procedimiento, $row);
-        }
-
-        $result['array_grado_procedimiento'] = $array_grado_procedimiento;
-
-        return $result;
-    }
-
-    public function insertar(){
-        $result = array('error' => false);
-
-        $sql = "INSERT INTO gt_grado_procedimiento(idgrado_modalidad, idprocedimiento, idrol_area, tipo_rol, url_formulario, orden, descripcion, condicion) 
-                VALUES ($this->idgrado_modalidad, $this->idprocedimiento, $this->idrol_area, '$this->tipo_rol', '$this->url', $this->orden, '$this->descripcion', 1)";
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Grado-Procedimiento agregado correctamente.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo agregar el Grado-Procedimiento.";
-        }      
-
-        return $result;
-    }
- 
-    public function actualizar(){
-        $result = array('error' => false);
-
-        $sql = "UPDATE gt_grado_procedimiento SET idgrado_modalidad = $this->idgrado_modalidad,
-                       idprocedimiento = $this->idprocedimiento, idrol_area = $this->idrol_area,
-                       tipo_rol = '$this->tipo_rol', orden = $this->orden,
-                       url_formulario = '$this->url', descripcion = '$this->descripcion'
-                WHERE id = $this->id";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Grado-Procedimiento actualizado con éxito.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo actualizar el Grado-Procedimiento.";
-        }
-
-        return $result;   
-    }
-    
-    public function activar() {
-        $result = array('error' => false);
-
-        $sql = "UPDATE gt_grado_procedimiento SET condicion = 1 WHERE id = $this->id";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Grado-Procedimiento activado con éxito.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo activar el Grado-Procedimiento.";
-        }
-
-        return $result;
-    }
-
-    public function desactivar() {
-        $result = array('error' => false);
-
-        $sql = "UPDATE gt_grado_procedimiento SET condicion = 0 WHERE id = $this->id";
-
-        $result_query = mysqli_query($this->conn, $sql);
-
-        if ($result_query) {
-            $result['message'] = "Grado-Procedimiento desactivado con éxito.";
-        }
-        else {
-            $result['error'] = true;
-            $result['message'] = "No se pudo desactivar el Grado-Procedimiento.";
-        }
 
         return $result;
     }    

@@ -3,7 +3,6 @@ import App from './App.vue'
 
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
-//Vue.use(Vuesax)
 Vue.use(Vuesax, {
   theme:{
     colors:{
@@ -75,17 +74,27 @@ new Vue({
     color_estados : config.color_estados,
     estados : config.estados,
   },  
-  methods: {         
-    mostrarNotificacion(titulo, color, tiempo, icono, mensaje, posicion) {
+  methods: {             
+    successAlert(message) {            
       this.$vs.notify({
-        title: titulo,
-        color: color,
-        time: tiempo,
-        icon: icono,
-        text: mensaje,
-        position: posicion,
-      })
+        title: 'Éxito!',
+        color: 'success',
+        time: 4000,
+        icon: 'done',
+        text: message,
+        position: 'bottom-right',
+      })     
     },
+    errorAlert(message) {      
+      this.$vs.notify({
+        title: 'Error!',
+        color: 'danger',
+        time: 4000,
+        icon: 'error_outline',
+        text: message,
+        position: 'bottom-right',
+      })
+    }
   },       
   router,
   store,    

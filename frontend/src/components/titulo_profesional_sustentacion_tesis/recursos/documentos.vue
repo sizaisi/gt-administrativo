@@ -215,25 +215,11 @@ export default {
         })
         .then(response => {          
           this.resetearValores();
-          if (!response.data.error) {
-            this.$root.mostrarNotificacion(
-              "Éxito!",
-              "success",
-              4000,
-              "done",
-              response.data.message,
-              "bottom-right"
-            );
+          if (!response.data.error) {            
+            this.$root.successAlert(response.data.message)
             this.getDocumento();
           } else {
-            this.$root.mostrarNotificacion(
-              "Error!",
-              "danger",
-              4000,
-              "error_outline",
-              response.data.message,
-              "bottom-right"
-            );
+            this.$root.errorAlert(response.data.message)
           }
         });
     },
@@ -257,24 +243,10 @@ export default {
                 this.resetearValores()
                 this.habilitarTipoDocumento(archivo.nombre_asignado)
                 if (!response.data.error) {
-                  this.$root.mostrarNotificacion(
-                    "Éxito!",
-                    "success",
-                    4000,
-                    "done",
-                    response.data.message,
-                    "bottom-right"
-                  );
+                  this.$root.successAlert(response.data.message)
                   this.getDocumento();
                 } else {
-                  this.$root.mostrarNotificacion(
-                    "Error!",
-                    "danger",
-                    4000,
-                    "error_outline",
-                    response.data.message,
-                    "bottom-right"
-                  );
+                  this.$root.errorAlert(response.data.message)
                 }
               });
           }

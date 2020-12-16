@@ -2,7 +2,7 @@
 <div class="container-fluid p-4" style="background-color: #fff;">
     <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre + ': Expedientes'"></h5>      
     <div class="text-center m-3">                           
-        <b-button :to="{ name: 'procedimientos', params: { grado_modalidad: grado_modalidad } }" variant="outline-info"> 
+        <b-button :to="{ name: 'procedimientos' }" variant="outline-info"> 
             <b-icon icon="arrow-left-short"></b-icon> Atras
         </b-button>
     </div> 
@@ -48,13 +48,10 @@
                             <template v-slot:cell(acciones)="data">                                 
                                 <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
                                 :to="{ name: 'info-expediente' + grado_modalidad.id, 
-                                        params: {   nombre_componente: grado_procedimiento.url_formulario, 
-                                                    usuario: usuario,                                                        
-                                                    grado_modalidad: grado_modalidad,                                                          
-                                                    grado_procedimiento: grado_procedimiento,  
+                                        params: {   nombre_componente: grado_procedimiento.url_formulario,                                                       
                                                     idexpediente: data.item.id,                                                                                                                  
                                                 } 
-                                        }"
+                                    }"
                                 >
                                 <i class="fa fa-edit"></i> Evaluar
                                 </b-button>                        
@@ -150,15 +147,13 @@
 </template>
 <script>
 export default {
-  name: 'menu-procedimientos',   
-  props: {            
-    grado_modalidad: Object,
-    grado_procedimiento: Object        
-  },    
+  name: 'menu-procedimientos',     
   data() {
     return {                               
         url: this.$root.API_URL,
-        usuario: this.$store.state.usuario,
+        usuario: this.$store.getters.getUsuario,
+        grado_modalidad: this.$store.getters.getGradoModalidad,
+        grado_procedimiento: this.$store.getters.getGradoProcedimiento,
         color_estados : this.$root.color_estados,
         estados : this.$root.estados,                                
         array_expediente : [],  
@@ -188,7 +183,7 @@ export default {
     }
   },
   created() {         
-    if (this.grado_procedimiento != null) { //si se ha establecido id grado modalidad      
+    if (this.grado_procedimiento != null) {
       this.getExpedientes(this.grado_procedimiento.id, this.grado_procedimiento.tipo_rol)    
     }
     else {
@@ -259,11 +254,11 @@ export default {
                 this.axios.post(`${this.url}/Movimiento/deshacer`, formData)
                 .then(response => {                                                                             
                     if (!response.data.error) {
-                        this.$root.mostrarNotificacion('Éxito!', 'success', 5000, 'done', response.data.message, 'bottom-right')
+                        this.$root.successAlert(response.data.message)
                         this.getExpedientesEnviados(idgradproc_origen)
                     }
                     else {                           
-                        this.$root.mostrarNotificacion('Error!', 'danger', 5000, 'error_outline', response.data.message, 'bottom-right')
+                        this.$root.errorAlert(response.data.message)
                     }
                 }) 
             }                   
