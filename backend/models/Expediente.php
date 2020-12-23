@@ -1,5 +1,4 @@
 <?php
-
 class Expediente {
 	private $id;
 	private $url_repo;

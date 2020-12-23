@@ -1,6 +1,5 @@
 <?php
-
-class GradoProcedimiento {
+class Procedimiento {
 	private $id;
 	private $idgrado_modalidad;
     private $idprocedimiento;
@@ -80,7 +79,7 @@ class GradoProcedimiento {
 		$this->descripcion = $descripcion;
 	}   
 
-    public function getGradoProcedimientos($idusuario, $codi_usuario, $tipo_usuario) {
+    public function getProcedimientos($idusuario, $codi_usuario, $tipo_usuario) {
 
         $result = array('error' => false);
         
@@ -90,17 +89,16 @@ class GradoProcedimiento {
 		if ($result_query && mysqli_num_rows($result_query) == 0) {
 
             if ($tipo_usuario == 'Administrativo') {
-                $sql = "SELECT GT_GP.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
-                        GT_P.nombre AS proc_nombre, GT_GP.descripcion AS proc_descripcion 
-                        FROM gt_grado_procedimiento AS GT_GP
-                        INNER JOIN gt_procedimiento AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
-                        INNER JOIN gt_expediente AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id
+                $sql = "SELECT GT_P.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
+                        GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                        FROM gt_procedimientos AS GT_P                        
+                        INNER JOIN gt_expediente AS GT_E ON GT_E.idgrado_procedimiento = GT_P.id
                         INNER JOIN SIAC_OPER_DEPE AS AC_OP ON AC_OP.codi_depe = GT_E.nues
-                        WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
-                        AND GT_GP.idrol_area =  $this->idrol_area
+                        WHERE GT_P.deleted_at IS NULL AND GT_P.idgradomodalidad = $this->idgrado_modalidad 
+                        AND GT_P.idrol =  $this->idrol_area
                         AND AC_OP.codi_oper = '$codi_usuario'
-                        GROUP BY GT_GP.id 
-                        ORDER BY GT_GP.id ASC";
+                        GROUP BY GT_P.id 
+                        ORDER BY GT_P.id ASC";
 
             }
             else if ($tipo_usuario == 'Docente') {	

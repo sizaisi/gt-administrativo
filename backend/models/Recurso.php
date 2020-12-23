@@ -75,8 +75,8 @@ class Recurso {
 				AND GT_RE.idruta <> $this->idruta 
 				AND GT_RE.idmovimiento IS NULL 
 				AND GT_RE.idruta IN (SELECT id
-								     FROM gt_ruta AS GT_R 								   
-								     wHERE GT_R.idgradproc_origen = $this->idgrado_proc)";
+								     FROM gt_rutas AS GT_R 								   
+								     wHERE GT_R.idproc_origen = $this->idgrado_proc)";
   
 		$result_query = mysqli_query($this->conn, $sql);
 
@@ -90,8 +90,8 @@ class Recurso {
 		}
 		else {
 			$result['error'] = true;
-			//$result['message'] = "No se pudo verificar recursos en rutas vecinas.";    
-			$result['message'] = $sql;    
+			$result['message'] = "No se pudo verificar recursos en rutas vecinas.";    
+			//$result['message'] = $sql;    
 		}	      
   
 		return $result;

@@ -50,13 +50,12 @@ class Archivo extends Recurso {
 		$result = array('error' => false);		
   
 		$sql = "SELECT GT_R.id, GT_A.nombre_asignado AS nombre, GT_A.mime, 
-					   GT_P.nombre AS procedimiento, GT_RA.nombre AS area 
+					   GT_P.nombre AS procedimiento, GT_RO.nombre AS area 
 				FROM gt_recurso AS GT_R
 				INNER JOIN gt_archivo GT_A ON GT_A.idrecurso = GT_R.id				
-				INNER JOIN gt_grado_procedimiento GT_GP ON GT_GP.id = GT_R.idgrado_proc
-				INNER JOIN gt_procedimiento GT_P ON GT_P.id = GT_GP.idprocedimiento
+				INNER JOIN gt_procedimientos GT_P ON GT_P.id = GT_R.idgrado_proc				
 				INNER JOIN gt_usuario GT_U ON GT_U.id = GT_R.idusuario
-				INNER JOIN gt_rol_area GT_RA ON GT_RA.id = GT_U.idrol_area
+				INNER JOIN gt_roles GT_RO ON GT_RO.id = GT_U.idrol_area
 				WHERE GT_R.idexpediente = $this->idexpediente ORDER BY id ASC";
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -76,19 +75,18 @@ class Archivo extends Recurso {
 		$result = array('error' => false);
   
 		$sql = "SELECT GT_RE.id, GT_A.nombre_asignado AS nombre, GT_A.mime, 
-					   GT_P.nombre AS procedimiento, GT_RA.nombre AS area 
+					   GT_P.nombre AS procedimiento, GT_RO.nombre AS area 
 				FROM gt_recurso AS GT_RE
 				INNER JOIN gt_archivo GT_A ON GT_A.idrecurso = GT_RE.id				
-				INNER JOIN gt_grado_procedimiento GT_GP ON GT_GP.id = GT_RE.idgrado_proc 
-				INNER JOIN gt_procedimiento GT_P ON GT_P.id = GT_GP.idprocedimiento 
+				INNER JOIN gt_procedimientos GT_P ON GT_P.id = GT_RE.idgrado_proc 				
 				INNER JOIN gt_usuario GT_U ON GT_U.id  = GT_RE.idusuario
-				INNER JOIN gt_rol_area GT_RA ON GT_RA.id  = GT_U.idrol_area 
+				INNER JOIN gt_roles GT_RO ON GT_RO.id  = GT_U.idrol_area 
 				WHERE GT_RE.idexpediente = $this->idexpediente 
-				AND GT_RE.idgrado_proc = ( SELECT GT_R.idgradproc_origen 
+				AND GT_RE.idgrado_proc = ( SELECT GT_R.idproc_origen 
 											FROM gt_movimiento GT_M 
-											INNER JOIN gt_ruta GT_R ON GT_M.idruta = GT_R.id 
-											WHERE GT_R.idgradproc_destino = $this->idgrado_proc 
-											AND GT_M.idexpediente = $this->idexpediente AND GT_R.condicion = 1 
+											INNER JOIN gt_rutas GT_R ON GT_M.idruta = GT_R.id 
+											WHERE GT_R.idproc_destino = $this->idgrado_proc 
+											AND GT_M.idexpediente = $this->idexpediente AND GT_R.deleted_at IS NULL
 											ORDER BY GT_M.id desc limit 1
 								  		) 
 				ORDER BY GT_RE.id ASC";			

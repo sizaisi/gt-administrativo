@@ -56,12 +56,11 @@ class Ruta {
 	function getRutasByIdProcOrigen() { //para devolver las rutas posibles dado un grado-procedimiento origen
 		$result = array('error' => false);
 
-		$sql = "SELECT GT_R.*, GT_P.nombre AS procedimiento_destino, GT_RA.nombre AS rol_area_destino
-				FROM gt_ruta GT_R 
-				LEFT JOIN gt_grado_procedimiento AS GT_GP ON GT_R.idgradproc_destino = GT_GP.id
-				LEFT JOIN gt_procedimiento AS GT_P ON GT_GP.idprocedimiento = GT_P.id
-				LEFT JOIN gt_rol_area AS GT_RA ON GT_GP.idrol_area = GT_RA.id
-				WHERE GT_R.idgradproc_origen = $this->idgradproc_origen AND GT_R.condicion = 1";
+		$sql = "SELECT GT_R.*, GT_P.nombre AS procedimiento_destino, GT_RO.nombre AS rol_area_destino
+				FROM gt_rutas GT_R 
+				LEFT JOIN gt_procedimientos AS GT_P ON GT_R.idproc_destino = GT_P.id				
+				LEFT JOIN gt_roles AS GT_RO ON GT_P.idrol = GT_RO.id
+				WHERE GT_R.idproc_origen = $this->idgradproc_origen AND GT_R.deleted_at IS NULL";
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query) {			
@@ -78,7 +77,7 @@ class Ruta {
 			$result['message'] = "No se pudo obtener las rutas.";            
 		}		  
 
-		$result['message'] = $sql;  
+		//$result['message'] = $sql;  
 		
 		return $result;
 	}  

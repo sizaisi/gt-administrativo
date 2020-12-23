@@ -41,14 +41,14 @@ export default {
     },
     created() {                           
         if (this.grado_modalidad != null) {
-            this.getGradoProcedimientos()
+            this.getProcedimientos()
         }
         else {
             this.$router.push({ name: 'home' }); 
         }                
     },
     methods: {                
-        getGradoProcedimientos() {        
+        getProcedimientos() {        
             let usuario = this.$store.getters.getUsuario               
             let formData = new FormData()
             formData.append('idgrado_modalidad', this.grado_modalidad.id)
@@ -57,8 +57,8 @@ export default {
             formData.append('codi_usuario', usuario.codi_usuario)
             formData.append('tipo_usuario', usuario.tipo)        
             
-            this.axios.post(`${this.url}/GradoProcedimiento/gradoProcedimientos`, formData)
-            .then(response => {            
+            this.axios.post(`${this.url}/Procedimiento/getProcedimientos`, formData)
+            .then(response => {                                             
                 if (!response.data.error) {
                     this.array_grado_procedimiento = response.data.array_grado_procedimiento
                 }

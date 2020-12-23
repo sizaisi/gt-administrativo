@@ -25,8 +25,14 @@ const routes = [
     component: require("./../views/expedientes/Bandeja.vue").default,       
   },
   {
-    path: '/expedientes/info-expediente4',
-    name: 'info-expediente4', //4=>id grado modalidad (titulo profesional - sustentacion tesis)
+    path: '/expedientes/info-expediente2',
+    name: 'info-expediente2', //2=>id grado modalidad (bachiller - automatico)
+    component: require("./../views/expedientes/Bachiller-Automatico.vue").default, 
+    props: true
+  },
+  {
+    path: '/expedientes/info-expediente1',
+    name: 'info-expediente1', //1=>id grado modalidad (titulo profesional - sustentacion tesis)
     component: require("./../views/expedientes/TituloProfesional-SustentacionTesis.vue").default, 
     props: true
   },

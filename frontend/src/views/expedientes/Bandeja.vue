@@ -193,7 +193,6 @@ export default {
   methods: {            
     getExpedientes(idgrado_procedimiento, tipo_rol) {  
         let formData = new FormData()
-
         formData.append('idgrado_procedimiento', idgrado_procedimiento)
         formData.append('codi_usuario', this.usuario.codi_usuario)  
         formData.append('tipo_usuario', this.usuario.tipo)  
@@ -215,7 +214,6 @@ export default {
     },
     getExpedientesEnviados(idgrado_procedimiento) {    
         let formData = new FormData()
-
         formData.append('idusuario', this.usuario.id)
         formData.append('idgradproc_origen', idgrado_procedimiento)         
         
@@ -244,7 +242,6 @@ export default {
         }).then(value => {
             if (value) {
                 let formData = new FormData()
-
                 formData.append('id', idmovimiento)
                 formData.append('idexpediente', idexpediente)    
                 formData.append('idgradproc_origen', idgradproc_origen)    

@@ -1,12 +1,11 @@
 <?php
-
 require_once 'config/dbcaja.php';
 
-class Caja {
-        
+class Caja {       
     private $conn;
 	
-	public function __construct() {
+    public function __construct() 
+    {
 		$this->conn = CajaDatabase::conectar();
 	}
     	

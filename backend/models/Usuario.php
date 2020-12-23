@@ -8,43 +8,35 @@ class Usuario
 
 	private $conn;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->conn = Database::conectar();
 	}
 
-	function getId()
-	{
+	function getId() {
 		return $this->id;
 	}
 
-	function setId($id)
-	{
+	function setId($id)	{
 		$this->id = $id;
 	}
 
-	function getCodiUsuario()
-	{
+	function getCodiUsuario() {
 		return $this->codi_usuario;
 	}
 
-	function setCodiUsuario($codi_usuario)
-	{
+	function setCodiUsuario($codi_usuario) {
 		$this->codi_usuario = $codi_usuario;
 	}
 
-	function getTipo()
-	{
+	function getTipo() {
 		return $this->tipo;
 	}
 
-	function setTipo($tipo)
-	{
+	function setTipo($tipo)	{
 		$this->tipo = $tipo;
 	}
 
-	public function getIdUsuario()
-	{
+	public function getIdUsuario() {
 		$result = array('error' => false);
 
 		$sql = "SELECT * 
@@ -62,8 +54,7 @@ class Usuario
 		return $result;
 	}
 
-	public function getMenus($codi_menu_grup)
-	{
+	public function getMenus($codi_menu_grup) {
 		$result = array('error' => false);
 
 		$sql = "SELECT DISTINCT (AC_MS.codi_msub), AC_MS.nomb_msub AS nombre
@@ -101,8 +92,7 @@ class Usuario
 	}
 
 	//Obtener los asesores o jurados solo de la facultad a la que pertenece la socitud del expediente
-	public function getDocentes($idexpediente)
-	{
+	public function getDocentes($idexpediente) {
 		$result = array('error' => false);
 
 		$sql = "SELECT ac_d.depa 

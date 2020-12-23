@@ -47,7 +47,7 @@ export default {
             formData.append('idrol_area', usuario.idrol_area)             
 
             this.axios.post(`${this.url}/GradoModalidad/inicio`, formData)
-            .then(response => {                              
+            .then(response => {                                      
                 if (!response.data.error) {
                     this.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
                 }

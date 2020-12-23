@@ -1,23 +1,19 @@
 <?php
-
-class GradoModalidad
-{
+class GradoModalidad {
     private $conn;
 
-    public function __construct()
-    {
+    public function __construct() {
         $this->conn = Database::conectar();
     }    
 
-    public function getGradoModalidades($codi_usuario, $idrol_area)
-    {
+    public function getGradoModalidades($codi_usuario, $idrol_area) {
         $result = array('error' => false);
 
-        $sql = "SELECT GM.id, GT.nombre AS nombre_grado_titulo, GMO.nombre AS nombre_modalidad_obtencion
-                FROM gt_grado_modalidad AS GM 
-                INNER JOIN gt_grado_titulo AS GT ON GM.idgrado_titulo = GT.id 
-                INNER JOIN gt_modalidad_obtencion AS GMO ON GM.idmodalidad_obtencion = GMO.id
-                WHERE GM.condicion = 1
+        $sql = "SELECT GM.id, G.nombre AS nombre_grado_titulo, M.nombre AS nombre_modalidad_obtencion
+                FROM gt_grados_modalidades AS GM 
+                INNER JOIN gt_grados AS G ON GM.idgrado = G.id 
+                INNER JOIN gt_modalidades AS M ON GM.idmodalidad = M.id
+                WHERE GM.deleted_at IS NULL
                 ORDER BY nombre_grado_titulo ASC, GM.id ASC";
 
         $result_query = mysqli_query($this->conn, $sql);
@@ -27,11 +23,11 @@ class GradoModalidad
         while ($row = $result_query->fetch_assoc()) {
 
             $sql2 = "SELECT COUNT(*) AS total_expedientes 
-                        FROM gt_grado_procedimiento AS GP INNER JOIN gt_expediente AS GE
-                        ON GP.id = GE.idgrado_procedimiento
-                        WHERE GP.idrol_area = $idrol_area
+                        FROM gt_procedimientos AS P INNER JOIN gt_expediente AS GE
+                        ON P.id = GE.idgrado_procedimiento
+                        WHERE P.idrol = $idrol_area
                         AND GE.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario') 
-                        AND GP.idgrado_modalidad = " . $row['id'];
+                        AND P.idgradomodalidad = " . $row['id'];
 
             $result_query2 = mysqli_query($this->conn, $sql2);
 
@@ -48,8 +44,7 @@ class GradoModalidad
         return $result;
     }    
 
-    public function searchByIdGradoTitulo($id)
-    {
+    public function searchByIdGradoTitulo($id) {
         $result = array('error' => false);
 
         $sql = "SELECT * FROM gt_grado_modalidad WHERE idgrado_titulo = $id";

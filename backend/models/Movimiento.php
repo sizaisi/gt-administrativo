@@ -53,23 +53,21 @@ class Movimiento {
 		$this->idmov_anterior = $idmov_anterior;
 	}
 
-	//function aceptar_movimiento y function cancelar movimiento
-
 	//para devolver el movimiento actual de entrada a traves del idgrado-procedimiento destino
 	function getLastMovimiento($idgradproc_destino) {		
 		$result = array('error' => false);
 
 		//obtener el ultimo movimiento
-        $sql = "SELECT GT_M.id, GT_U.id AS idusuario, GT_U.codi_usuario, GT_U.tipo AS tipo_usuario, GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_GP.tipo_rol, GT_RA.nombre AS rol_area_origen
+        $sql = "SELECT GT_M.id, GT_U.id AS idusuario, GT_U.codi_usuario, GT_U.tipo AS tipo_usuario, 
+		        GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_P.tipo_rol, GT_RO.nombre AS rol_area_origen
 				FROM gt_movimiento AS GT_M 
 					INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_M.idusuario 
-					INNER JOIN gt_ruta AS GT_R ON GT_R.id = GT_M.idruta 
-					INNER JOIN gt_grado_procedimiento AS GT_GP ON GT_GP.id = GT_R.idgradproc_origen 
-					INNER JOIN gt_procedimiento AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
-					LEFT JOIN gt_rol_area AS GT_RA ON GT_GP.tipo_rol = '' AND GT_RA.id = GT_GP.idrol_area 
-				WHERE GT_R.idgradproc_destino = $idgradproc_destino 
+					INNER JOIN gt_rutas AS GT_R ON GT_R.id = GT_M.idruta 
+					INNER JOIN gt_procedimientos AS GT_P ON GT_P.id = GT_R.idproc_origen 					
+					LEFT JOIN gt_roles AS GT_RO ON GT_P.tipo_rol IS NULL AND GT_RO.id = GT_P.idrol
+				WHERE GT_R.idproc_destino = $idgradproc_destino 
 					AND GT_M.idexpediente = $this->idexpediente 
-					AND GT_R.condicion = 1
+					AND GT_R.deleted_at IS NULL
 				ORDER BY GT_M.id desc limit 1";				
 		$result_query = mysqli_query($this->conn, $sql);
 
@@ -140,7 +138,7 @@ class Movimiento {
 						GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
 						AC_E.nesc AS escuela, GT_R.idgradproc_origen, GT_M.idmov_anterior
 					FROM gt_movimiento AS GT_M
-						INNER JOIN gt_ruta AS GT_R ON GT_R.id = GT_M.idruta 
+						INNER JOIN gt_rutas AS GT_R ON GT_R.id = GT_M.idruta 
 						INNER JOIN gt_expediente AS GT_E ON GT_E.id = GT_M.idexpediente 
 						INNER JOIN gt_graduando_expediente AS GT_GE ON GT_GE.idexpediente = GT_E.id 
 						INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando 		
@@ -152,7 +150,7 @@ class Movimiento {
 					GROUP BY GT_GE.idexpediente 
 					ORDER BY GT_M.id ASC) AS t_movimiento 
 				INNER JOIN gt_movimiento AS GT_MO ON GT_MO.id = t_movimiento.idmov_anterior
-				INNER JOIN gt_ruta AS GT_RU ON GT_RU.id = GT_MO.idruta";		
+				INNER JOIN gt_rutas AS GT_RU ON GT_RU.id = GT_MO.idruta";		
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query) {

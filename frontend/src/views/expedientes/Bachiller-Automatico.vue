@@ -47,11 +47,7 @@
                       <div class="form-group col-md-4">
                         <label class="text-info">Código</label>
                         <label class="lbl-data" v-text="expediente.codigo"></label>
-                      </div>
-                      <div class="form-group col-md-8">
-                        <label class="text-info">Título Proyecto</label>
-                        <label class="lbl-data" v-text="expediente.titulo"></label>
-                      </div>
+                      </div>                      
                     </div>
                     <div class="form-row">
                       <div class="form-group col-md-4">
@@ -250,14 +246,9 @@
   </div>
 </template>
 <script>
-import verificar_requisitos_grado from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/verificar_requisitos_grado/index.vue";
-import verificar_pertinencia_tema from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/verificar_pertinencia_tema/index.vue";
-import designar_asesor_comision_calificacion from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/designar_asesor_comision_calificacion/index.vue";
-import emitir_resolucion_asignacion_asesor_tema from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/emitir_resolucion_asignacion_asesor_tema/index.vue";
-import nombrar_jurado_adjuntar_resolucion from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/nombrar_jurado_adjuntar_resolucion/index.vue";
-import verificar_pagos_adjuntar_documentos from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/verificar_pagos_adjuntar_documentos/index.vue";
-import aprobar_consejo_facultad_autorizar_emision_diploma from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/aprobar_consejo_facultad_autorizar_emision_diploma/index.vue";
-import generar_imprimir_diploma from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/generar_imprimir_diploma/index.vue";
+import verificar_pagos_adjuntar_documentos from "@/components/bachiller_automatico/procedimientos/verificar_pagos_adjuntar_documentos/index.vue";
+import aprobar_consejo_facultad_autorizar_emision_diploma from "@/components/bachiller_automatico/procedimientos/aprobar_consejo_facultad_autorizar_emision_diploma/index.vue";
+import generar_imprimir_diploma from "@/components/bachiller_automatico/procedimientos/generar_imprimir_diploma/index.vue";
 
 export default {
   name: "info-expediente",
@@ -266,12 +257,7 @@ export default {
     idexpediente: String,
   },
   components: {
-    verificar_requisitos_grado,
-    verificar_pertinencia_tema,
-    designar_asesor_comision_calificacion,    
-    emitir_resolucion_asignacion_asesor_tema,    
-    nombrar_jurado_adjuntar_resolucion,        
-    verificar_pagos_adjuntar_documentos,            
+    verificar_pagos_adjuntar_documentos,
     aprobar_consejo_facultad_autorizar_emision_diploma,
     generar_imprimir_diploma,
   },
