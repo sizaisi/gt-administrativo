@@ -310,7 +310,7 @@ export default {
   methods: {
     getLastMovimiento() {            
       let formData = new FormData()
-      formData.append('idgradproc_destino', this.procedimiento.id)
+      formData.append('idproc_destino', this.procedimiento.id)
       formData.append('idexpediente', this.idexpediente)        
 
       this.axios
