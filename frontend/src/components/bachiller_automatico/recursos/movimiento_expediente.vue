@@ -52,8 +52,8 @@ export default {
                     formData.append('idexpediente', this.expediente.id)  
                     formData.append('idusuario', this.usuario.id)
                     formData.append('idruta', ruta.id)
-                    formData.append('idgradproc_origen', ruta.idproc_origen)
-                    formData.append('idgradproc_destino', ruta.idproc_destino)
+                    formData.append('idproc_origen', ruta.idproc_origen)
+                    formData.append('idproc_destino', ruta.idproc_destino)
                     formData.append('idmov_anterior', this.movimiento.id)
                     formData.append('estado_expediente', this.estados[ruta.etiqueta])                                 
 
@@ -63,8 +63,7 @@ export default {
                     console.log(this.movimiento)
 
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
-                        .then(response => {    
-                            console.log(response)                                      
+                        .then(response => {                                                                  
                             if (!response.data.error) {
                                 this.$root.successAlert(response.data.message)
                                 this.$router.push({name: 'bandeja'})                  
