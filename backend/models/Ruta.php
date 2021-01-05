@@ -3,8 +3,8 @@
 class Ruta {
 	private $id;
 	private $nombre;
-	private $idgradproc_origen;
-    private $idgradproc_destino;
+	private $idproc_origen;
+    private $idproc_destino;
 	private $etiqueta;
 	
 	private $conn;
@@ -29,20 +29,20 @@ class Ruta {
 		$this->nombre = $nombre;
 	}	
 
-	function getIdGradProcOrigen() {
-		return $this->idgradproc_origen;
+	function getIdProcOrigen() {
+		return $this->idproc_origen;
 	}
 
-	function setIdGradProcOrigen($idgradproc_origen) {
-		$this->idgradproc_origen = $idgradproc_origen;
+	function setIdProcOrigen($idproc_origen) {
+		$this->idproc_origen = $idproc_origen;
 	}
 
-	function getIdGradProcDestino() {
-		return $this->idgradproc_destino;
+	function getIdProcDestino() {
+		return $this->idproc_destino;
 	}
 
-	function setIdGradProcDestino($idgradproc_destino) {
-		$this->idgradproc_destino = $idgradproc_destino;
+	function setIdProcDestino($idproc_destino) {
+		$this->idproc_destino = $idproc_destino;
 	}
 
 	function getEtiqueta() {
@@ -60,7 +60,7 @@ class Ruta {
 				FROM gt_rutas GT_R 
 				LEFT JOIN gt_procedimientos AS GT_P ON GT_R.idproc_destino = GT_P.id				
 				LEFT JOIN gt_roles AS GT_RO ON GT_P.idrol = GT_RO.id
-				WHERE GT_R.idproc_origen = $this->idgradproc_origen AND GT_R.deleted_at IS NULL";
+				WHERE GT_R.idproc_origen = $this->idproc_origen AND GT_R.deleted_at IS NULL";
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query) {			

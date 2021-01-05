@@ -36,7 +36,7 @@ class Usuario
 		$this->tipo = $tipo;
 	}
 
-	public function getIdUsuario() {
+	public function getUsuario() {
 		$result = array('error' => false);
 
 		$sql = "SELECT * 

@@ -60,15 +60,15 @@
 </template>
 <script>
 export default {      
-  props: {        
-    expediente: Object,
-    idgrado_proc: String,    
-    idusuario: String,                        
+  props: {            
     ruta: Object
   },
   data() {
     return {                       
-        url: this.$root.API_URL,                      
+        url: this.$root.API_URL,   
+        usuario: this.$store.getters.getUsuario, 
+        procedimiento: this.$store.getters.getProcedimiento,  
+        expediente: this.$store.getters.getExpediente,                     
         fecha_sorteo : null, 
         array_jurado : [],
         array_docente : [],                                       
@@ -113,8 +113,8 @@ export default {
     getJurados() {         
         let formData = new FormData()
         formData.append('idexpediente', this.expediente.id)   
-        formData.append('idgrado_proc', this.idgrado_proc)   
-        formData.append('idusuario', this.idusuario)   
+        formData.append('idprocedimiento', this.procedimiento.id)   
+        formData.append('idusuario', this.usuario.id)   
 
         this.axios.post(`${this.url}/Persona/get_jurado`, formData)
             .then(response => {            
@@ -133,8 +133,8 @@ export default {
     registrarJurado() {            
         let formData = new FormData()
         formData.append('idexpediente', this.expediente.id)               
-        formData.append('idgrado_proc', this.idgrado_proc)    
-        formData.append('idusuario', this.idusuario)    
+        formData.append('idprocedimiento', this.procedimiento.id)    
+        formData.append('idusuario', this.usuario.id)    
         formData.append('idruta', this.ruta.id)    
         formData.append('iddocente', this.iddocente)    
         formData.append('tipo', this.tipo)            
@@ -155,7 +155,7 @@ export default {
         let formData = new FormData()
         formData.append('id', id)  
         formData.append('idexpediente', this.expediente.id)  
-        formData.append('idgrado_proc', this.idgrado_proc)  
+        formData.append('idprocedimiento', this.procedimiento.id)  
         formData.append('tipo', tipo)                  
 
         this.$bvModal.msgBoxConfirm(

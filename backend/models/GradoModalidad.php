@@ -6,15 +6,15 @@ class GradoModalidad {
         $this->conn = Database::conectar();
     }    
 
-    public function getGradoModalidades($codi_usuario, $idrol_area) {
+    public function getGradoModalidades($codi_usuario, $idrol) {
         $result = array('error' => false);
 
-        $sql = "SELECT GM.id, G.nombre AS nombre_grado_titulo, M.nombre AS nombre_modalidad_obtencion
-                FROM gt_grados_modalidades AS GM 
+        $sql = "SELECT GM.id, G.nombre AS grado_titulo, M.nombre AS modalidad, GM.componente
+                FROM gt_grado_modalidades AS GM 
                 INNER JOIN gt_grados AS G ON GM.idgrado = G.id 
                 INNER JOIN gt_modalidades AS M ON GM.idmodalidad = M.id
                 WHERE GM.deleted_at IS NULL
-                ORDER BY nombre_grado_titulo ASC, GM.id ASC";
+                ORDER BY grado_titulo ASC, GM.id ASC";
 
         $result_query = mysqli_query($this->conn, $sql);
 
@@ -24,8 +24,8 @@ class GradoModalidad {
 
             $sql2 = "SELECT COUNT(*) AS total_expedientes 
                         FROM gt_procedimientos AS P INNER JOIN gt_expediente AS GE
-                        ON P.id = GE.idgrado_procedimiento
-                        WHERE P.idrol = $idrol_area
+                        ON P.id = GE.idprocedimiento
+                        WHERE P.idrol = $idrol
                         AND GE.nues IN (SELECT codi_depe FROM SIAC_OPER_DEPE WHERE codi_oper='$codi_usuario') 
                         AND P.idgradomodalidad = " . $row['id'];
 
@@ -39,7 +39,7 @@ class GradoModalidad {
             }
         }
 
-        $result['array_grado_modalidad'] = $array_grado_modalidad;
+        $result['array_grado_modalidad'] = $array_grado_modalidad;        
 
         return $result;
     }    

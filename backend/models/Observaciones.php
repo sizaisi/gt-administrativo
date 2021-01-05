@@ -25,7 +25,7 @@ class Observaciones extends Recurso {
 				FROM gt_recurso AS GT_R
 				INNER JOIN gt_observaciones GT_O ON GT_O.idrecurso = GT_R.id
 				WHERE GT_R.idexpediente = $this->idexpediente 
-                AND GT_R.idgrado_proc = $this->idgrado_proc 
+                AND GT_R.idprocedimiento = $this->idprocedimiento 
 				AND GT_R.idusuario = $this->idusuario
 				AND GT_R.idmovimiento IS NULL";
   
@@ -46,8 +46,8 @@ class Observaciones extends Recurso {
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion	
 		
-		$sql = "INSERT INTO gt_recurso(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
-				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
+		$sql = "INSERT INTO gt_recurso(idexpediente, idprocedimiento, idusuario, idmovimiento, idruta) 
+				VALUES ($this->idexpediente, $this->idprocedimiento, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
 		$idrecurso;

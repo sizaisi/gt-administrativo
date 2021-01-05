@@ -32,10 +32,8 @@
 </template>
 <script>
 export default {
-    name: 'resolucion-designacion-nuevo-asesor',
-    props: {        
-        expediente: Object,
-        graduando: Object,            
+    name: 'generacion-documento',
+    props: {                
         asesor: Object,      
         jurados: Array,
         nombre_archivo_pdf: String,  
@@ -44,6 +42,8 @@ export default {
     data() {
         return {                                     
             url_pdf : `${this.$root.API_URL}/pdfs/titulo_profesional_sustentacion_tesis/`,
+            graduando: this.$store.getters.getGraduando,  
+            expediente: this.$store.getters.getExpediente,   
             show_frame: 'none'                        
         }
     },

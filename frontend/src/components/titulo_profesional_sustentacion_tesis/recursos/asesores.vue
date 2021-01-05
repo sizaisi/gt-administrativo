@@ -60,15 +60,15 @@
 <script>
 export default {
     name: 'asesores',
-    props: {        
-        expediente: Object,
-        idgrado_proc: String,    
-        idusuario: String,                        
+    props: {                                    
         ruta: Object,        
     },
     data() {
         return {             
-            url: this.$root.API_URL,                                         
+            url: this.$root.API_URL,    
+            usuario: this.$store.getters.getUsuario, 
+            procedimiento: this.$store.getters.getProcedimiento,  
+            expediente: this.$store.getters.getExpediente,                                      
             asesor_anterior : null,  //object
             asesor : null,  //object 
             docente_seleccionado : null,  //object              
@@ -121,8 +121,8 @@ export default {
         getAsesor() {
             let formData = new FormData()
             formData.append('idexpediente', this.expediente.id)                        
-            formData.append('idgrado_proc', this.idgrado_proc)
-            formData.append('idusuario', this.idusuario)                                   
+            formData.append('idprocedimiento', this.procedimiento.id)
+            formData.append('idusuario', this.usuario.id)                                   
             
             this.axios.post(`${this.url}/Persona/get_asesor`, formData)
             .then(response => {                 
@@ -154,14 +154,14 @@ export default {
 
             let formData = new FormData()
             formData.append('idexpediente', this.expediente.id)                        
-            formData.append('idgrado_proc', this.idgrado_proc)
-            formData.append('idusuario', this.idusuario)   
+            formData.append('idprocedimiento', this.procedimiento.id)
+            formData.append('idusuario', this.usuario.id)   
             formData.append('idruta', this.ruta.id)   
             formData.append('iddocente', this.docente_seleccionado.id)                                   
             formData.append('tipo', 'asesor')                                   
             
             this.axios.post(`${this.url}/Persona/store`, formData)
-                .then(response => {                                                   
+                .then(response => {                                                                    
                     this.resetearValores()                                   
                     if (!response.data.error) {                        
                         this.$root.successAlert(response.data.message)
@@ -176,7 +176,7 @@ export default {
             let formData = new FormData()
             formData.append('id', id)                        
             formData.append('idexpediente', this.expediente.id)
-            formData.append('idgrado_proc', this.idgrado_proc)
+            formData.append('idprocedimiento', this.procedimiento.id)
             formData.append('tipo', 'asesor')                  
             
             this.$bvModal.msgBoxConfirm(
@@ -194,11 +194,11 @@ export default {
                         this.resetearValores()  
                         this.asesor = null
                         if (!response.data.error) {
-                            this.$root.mostrarNotificacion('Éxito!', 'success', 4000, 'done', response.data.message, 'bottom-right')
+                            this.$root.successAlert(response.data.message)                            
                             this.getAsesor()                            
                         }
                         else {
-                            this.$root.mostrarNotificacion('Error!', 'danger', 4000, 'error_outline', response.data.message, 'bottom-right')
+                            this.$root.errorAlert(response.data.message)
                         }
                     })                
                 }

@@ -9,7 +9,7 @@
     <div class="row text-center mt-3" v-for="(group, index) in objectGroups" :key="index">
         <div class="col-lg-4" v-for="(grado_modalidad, i) in array_grado_modalidad.slice(index * itemsPerRow, (index + 1) * itemsPerRow)" :key="i">           
         <div class="counter">
-            <h5 class="count-text-title" v-text="grado_modalidad.nombre_grado_titulo+' - '+grado_modalidad.nombre_modalidad_obtencion"></h5>               
+            <h5 class="count-text-title" v-text="grado_modalidad.grado_titulo + ' - ' + grado_modalidad.modalidad"></h5>               
             <h2 class="timer count-title count-number text-danger" v-text="grado_modalidad.total_expedientes"></h2>      
             <p class="count-text">Solicitudes pendientes</p><br>               
             <b-button pill variant="info" @click="mostrarProcedimientos(grado_modalidad)">
@@ -44,12 +44,12 @@ export default {
             let formData = new FormData()
 
             formData.append('codi_usuario', usuario.codi_usuario)
-            formData.append('idrol_area', usuario.idrol_area)             
+            formData.append('idrol', usuario.idrol)             
 
             this.axios.post(`${this.url}/GradoModalidad/inicio`, formData)
             .then(response => {                                      
-                if (!response.data.error) {
-                    this.array_grado_modalidad = response.data.array_grado_modalidad                                                                       
+                if (!response.data.error) {                    
+                    this.array_grado_modalidad = response.data.array_grado_modalidad           
                 }
                 else {
                     console.log(response.data.message)

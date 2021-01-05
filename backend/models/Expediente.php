@@ -25,7 +25,7 @@ class Expediente {
 		$this->conn = Database::conectar();
 	}
 	
-	public function getList($idgrado_procedimiento, $codi_usuario, $tipo_usuario, $tipo_rol) {
+	public function getList($idprocedimiento, $codi_usuario, $tipo_usuario, $tipo_rol) {
 		$result = array('error' => false);
   
 		if ($tipo_usuario == 'Administrativo') {
@@ -39,7 +39,7 @@ class Expediente {
 						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = AC_E.nues
 						INNER JOIN (SELECT AC_I.cui, AC_I.apn, AC_ID.nues, FROM acdiden AS AC_I INNER JOIN acdidal AS AC_ID ON AC_ID.cui = AC_I.cui WHERE AC_ID.cond = 'E')
 						 AS AC_I ON AC_I.cui = GT_G.cui
-					WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento					
+					WHERE GT_E.idprocedimiento = $idprocedimiento					
 						AND AC_OP.codi_oper = '$codi_usuario'						
 					GROUP BY GT_GE.idexpediente 
 					ORDER BY GT_E.id ASC";*/
@@ -52,7 +52,7 @@ class Expediente {
 						INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui	
 						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues							
 						INNER JOIN SIAC_OPER_DEPE AC_OP ON AC_OP.codi_depe = AC_E.nues						
-					WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento					
+					WHERE GT_E.idprocedimiento = $idprocedimiento					
 						AND AC_OP.codi_oper = '$codi_usuario'						
 					GROUP BY GT_GE.idexpediente 
 					ORDER BY GT_E.id ASC";
@@ -68,7 +68,7 @@ class Expediente {
 							INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando 		
 							INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
 							INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						
-						WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento
+						WHERE GT_E.idprocedimiento = $idprocedimiento
 							AND GT_E.id IN (SELECT R.idexpediente
 											FROM gt_recurso AS R
 												INNER JOIN gt_persona AS P ON P.idrecurso = R.id
@@ -88,7 +88,7 @@ class Expediente {
 							INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando 		
 							INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
 							INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues						 
-						WHERE GT_E.idgrado_procedimiento = $idgrado_procedimiento
+						WHERE GT_E.idprocedimiento = $idprocedimiento
 						AND GT_E.id IN (SELECT R.idexpediente
 										FROM gt_recurso AS R
 										INNER JOIN gt_persona AS P ON P.idrecurso = R.id

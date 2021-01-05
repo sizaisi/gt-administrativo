@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="container-fluid" style="background-color: #fff; padding:20px;">
-      <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre"></h5>
-      <p class="narrow text-center" v-text="grado_procedimiento.proc_descripcion"></p>
+      <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="procedimiento.nombre"></h5>
+      <p class="narrow text-center" v-text="procedimiento.descripcion"></p>
       <div class="text-center m-3">
         <b-button :to="{ name: 'bandeja' }" variant="outline-info">
           <b-icon icon="arrow-left-short"></b-icon>Atras
@@ -196,12 +196,7 @@
           </b-tab>
           <b-tab title="Derivación" v-if="movimiento != null">            
             <component
-              :is="nombre_componente"
-              :grado_modalidad="grado_modalidad"
-              :grado_procedimiento="grado_procedimiento"
-              :usuario="usuario"
-              :expediente="expediente"
-              :graduando="graduando"
+              :is="procedimiento.componente"              
               :movimiento="movimiento"
               v-if="graduando != null"
             />
@@ -260,9 +255,8 @@ import aprobar_consejo_facultad_autorizar_emision_diploma from "@/components/tit
 import generar_imprimir_diploma from "@/components/titulo_profesional_sustentacion_tesis/procedimientos/generar_imprimir_diploma/index.vue";
 
 export default {
-  name: "info-expediente",
-  props: {
-    nombre_componente: String,  
+  name: "tituloprofesional-sustentaciontesis",
+  props: {    
     idexpediente: String,
   },
   components: {
@@ -281,7 +275,7 @@ export default {
       url_show_file: `${this.$root.API_URL}/utils/show_file.php`,
       usuario: this.$store.getters.getUsuario,
       grado_modalidad: this.$store.getters.getGradoModalidad,
-      grado_procedimiento: this.$store.getters.getGradoProcedimiento,
+      procedimiento: this.$store.getters.getProcedimiento,
       expediente: {},
       graduando: {},
       movimiento: {},
@@ -329,7 +323,7 @@ export default {
   methods: {
     getLastMovimiento() {            
       let formData = new FormData()
-      formData.append('idgradproc_destino', this.grado_procedimiento.id)
+      formData.append('idproc_destino', this.procedimiento.id)
       formData.append('idexpediente', this.idexpediente)        
 
       this.axios
@@ -378,6 +372,7 @@ export default {
         .then(response => {                    
           if (!response.data.error) {
             this.graduando = response.data.graduando;
+            this.$store.dispatch('setGraduando', this.graduando)  
           } else {
             console.log(response.data.message)
           }
@@ -399,7 +394,7 @@ export default {
     },
     getArchivosProcOrigen() {            
       let formData = new FormData()
-      formData.append('idgrado_proc', this.grado_procedimiento.id)
+      formData.append('idprocedimiento', this.procedimiento.id)
       formData.append('idexpediente', this.idexpediente)  
 
       this.axios

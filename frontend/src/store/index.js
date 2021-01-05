@@ -11,8 +11,9 @@ export default new Vuex.Store({
   state: {
     usuario: null,    
     grado_modalidad: null,    
-    grado_procedimiento: null,    
-    expediente:null,
+    procedimiento: null,    
+    graduando: null,
+    expediente: null,
     rutas: [],
     rutaVecinaActiva: false
   },
@@ -23,8 +24,11 @@ export default new Vuex.Store({
     SET_GRADO_MODALIDAD(state, grado_modalidad) {
       state.grado_modalidad = grado_modalidad
     },    
-    SET_GRADO_PROCEDIMIENTO(state, grado_procedimiento) {
-      state.grado_procedimiento = grado_procedimiento
+    SET_PROCEDIMIENTO(state, procedimiento) {
+      state.procedimiento = procedimiento
+    },   
+    SET_GRADUANDO(state, graduando) {
+      state.graduando = graduando
     },   
     SET_EXPEDIENTE(state, expediente) {
       state.expediente = expediente
@@ -43,15 +47,18 @@ export default new Vuex.Store({
     setGradoModalidad({commit}, grado_modalidad) {
       commit('SET_GRADO_MODALIDAD', grado_modalidad)
     },    
-    setGradoProcedimiento({commit}, grado_procedimiento) {
-      commit('SET_GRADO_PROCEDIMIENTO', grado_procedimiento)
+    setProcedimiento({commit}, procedimiento) {
+      commit('SET_PROCEDIMIENTO', procedimiento)
     },   
+    setGraduando({commit}, graduando) {
+      commit('SET_GRADUANDO', graduando)
+    },
     setExpediente({commit}, expediente) {
       commit('SET_EXPEDIENTE', expediente)
     },
     getRutas({commit, state}) {
       let formData = new FormData()
-      formData.append('idgradproc_origen', state.grado_procedimiento.id)        
+      formData.append('idproc_origen', state.procedimiento.id)        
 
       axios.post(`${config.API_URL}/Ruta/getRutasByProc`, formData)
       .then(response => {                    
@@ -66,7 +73,7 @@ export default new Vuex.Store({
     verificarRecursoRutasVecinas({ commit, state }, idruta) {           
       let formData = new FormData()
       formData.append('idexpediente', state.expediente.id)
-      formData.append('idgrado_proc', state.grado_procedimiento.id)
+      formData.append('idprocedimiento', state.procedimiento.id)
       formData.append('idusuario', state.usuario.id)
       formData.append('idruta', idruta)     
 
@@ -88,8 +95,14 @@ export default new Vuex.Store({
     getGradoModalidad: state => {
       return state.grado_modalidad;
     },
-    getGradoProcedimiento: state => {
-      return state.grado_procedimiento;
+    getProcedimiento: state => {
+      return state.procedimiento;
+    },    
+    getGraduando: state => {
+      return state.graduando;
+    },    
+    getExpediente: state => {
+      return state.expediente;
     },    
   },
   modules: {

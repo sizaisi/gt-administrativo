@@ -1,6 +1,6 @@
 <template>  
 <div class="container-fluid p-4" style="background-color: #fff;">
-    <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="grado_procedimiento.proc_nombre + ': Expedientes'"></h5>      
+    <h5 class="text-center font-weight-bold text-uppercase text-danger" v-text="procedimiento.nombre + ': Expedientes'"></h5>      
     <div class="text-center m-3">                           
         <b-button :to="{ name: 'procedimientos' }" variant="outline-info"> 
             <b-icon icon="arrow-left-short"></b-icon> Atras
@@ -8,7 +8,7 @@
     </div> 
     <b-card no-body>
         <b-tabs card active-nav-item-class="font-weight-bold text-uppercase text-danger">
-            <b-tab title="Recibidos" @click="getExpedientes(grado_procedimiento.id, grado_procedimiento.tipo_rol)" active>                
+            <b-tab title="Recibidos" @click="getExpedientes(procedimiento.id, procedimiento.tipo_rol)" active>                
                 <div class="row">
                     <div class="col-lg-12">
                         <b-row>
@@ -47,11 +47,9 @@
                             </template> 
                             <template v-slot:cell(acciones)="data">                                 
                                 <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
-                                :to="{ name: 'info-expediente' + grado_modalidad.id, 
-                                        params: {   nombre_componente: grado_procedimiento.url_formulario,                                                       
-                                                    idexpediente: data.item.id,                                                                                                                  
-                                                } 
-                                    }"
+                                :to="{ name: grado_modalidad.componente, 
+                                        params: { idexpediente: data.item.id } 
+                                     }"
                                 >
                                 <i class="fa fa-edit"></i> Evaluar
                                 </b-button>                        
@@ -77,7 +75,7 @@
                     </div>
                 </div>                                       
             </b-tab>
-            <b-tab title="Enviados" @click="getExpedientesEnviados(grado_procedimiento.id)"> 
+            <b-tab title="Enviados" @click="getExpedientesEnviados(procedimiento.id)"> 
                 <div class="row">
                     <div class="col-lg-12">
                         <b-row>
@@ -116,7 +114,7 @@
                             </template> 
                             <template v-slot:cell(acciones)="data">                                 
                                 <b-button variant="warning" size="sm" title="Deshacer" 
-                                    @click="deshacer(data.item.id, data.item.idexpediente, data.item.idgradproc_origen, data.item.fecha_ant, data.item.etiqueta)">
+                                    @click="deshacer(data.item.id, data.item.idexpediente, data.item.idproc_origen, data.item.fecha_ant, data.item.etiqueta)">
                                     <i class="fa fa-edit"></i> Deshacer
                                 </b-button>                        
                             </template>    
@@ -147,13 +145,13 @@
 </template>
 <script>
 export default {
-  name: 'menu-procedimientos',     
+  name: 'bandeja',     
   data() {
     return {                               
         url: this.$root.API_URL,
         usuario: this.$store.getters.getUsuario,
         grado_modalidad: this.$store.getters.getGradoModalidad,
-        grado_procedimiento: this.$store.getters.getGradoProcedimiento,
+        procedimiento: this.$store.getters.getProcedimiento,
         color_estados : this.$root.color_estados,
         estados : this.$root.estados,                                
         array_expediente : [],  
@@ -183,17 +181,17 @@ export default {
     }
   },
   created() {         
-    if (this.grado_procedimiento != null) {
-      this.getExpedientes(this.grado_procedimiento.id, this.grado_procedimiento.tipo_rol)    
+    if (this.procedimiento != null) {
+      this.getExpedientes(this.procedimiento.id, this.procedimiento.tipo_rol)    
     }
     else {
       this.$router.push({ name: 'home' }); 
     }      
   },  
   methods: {            
-    getExpedientes(idgrado_procedimiento, tipo_rol) {  
+    getExpedientes(idprocedimiento, tipo_rol) {  
         let formData = new FormData()
-        formData.append('idgrado_procedimiento', idgrado_procedimiento)
+        formData.append('idprocedimiento', idprocedimiento)
         formData.append('codi_usuario', this.usuario.codi_usuario)  
         formData.append('tipo_usuario', this.usuario.tipo)  
         formData.append('tipo_rol', tipo_rol)  
@@ -212,10 +210,10 @@ export default {
             this.toggleBusy()
         })            
     },
-    getExpedientesEnviados(idgrado_procedimiento) {    
+    getExpedientesEnviados(idprocedimiento) {    
         let formData = new FormData()
         formData.append('idusuario', this.usuario.id)
-        formData.append('idgradproc_origen', idgrado_procedimiento)         
+        formData.append('idproc_origen', idprocedimiento)         
         
         this.toggleBusy()
 
@@ -231,7 +229,7 @@ export default {
             this.toggleBusy()
         })
     },    
-    deshacer(idmovimiento, idexpediente, idgradproc_origen, fecha_ant, etiqueta) { // movimiento para derivar el expediente al siguiente procedimiento
+    deshacer(idmovimiento, idexpediente, idproc_origen, fecha_ant, etiqueta) {
         this.$bvModal.msgBoxConfirm(
             '¿Seguro que quiere deshacer el movimiento realizado sobre este expediente?', {
             title: 'Deshacer Movimiento',                    
@@ -244,7 +242,7 @@ export default {
                 let formData = new FormData()
                 formData.append('id', idmovimiento)
                 formData.append('idexpediente', idexpediente)    
-                formData.append('idgradproc_origen', idgradproc_origen)    
+                formData.append('idproc_origen', idproc_origen)    
                 formData.append('fecha_ant', fecha_ant)    
                 formData.append('estado_expediente_ant', this.estados[etiqueta])                                                                 
 
@@ -252,7 +250,7 @@ export default {
                 .then(response => {                                                                             
                     if (!response.data.error) {
                         this.$root.successAlert(response.data.message)
-                        this.getExpedientesEnviados(idgradproc_origen)
+                        this.getExpedientesEnviados(idproc_origen)
                     }
                     else {                           
                         this.$root.errorAlert(response.data.message)

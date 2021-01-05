@@ -3,11 +3,11 @@ require_once 'models/Usuario.php';
 
 class UsuarioController
 {
-        public function getIdUsuario()
+        public function getUsuario()
         {
                 $usuario = new Usuario();
                 $usuario->setCodiUsuario($_POST['codi_usuario']);
-                $result = $usuario->getIdUsuario();
+                $result = $usuario->getUsuario();
 
                 echo json_encode($result);
         }

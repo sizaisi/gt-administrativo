@@ -49,7 +49,7 @@ export default {
             this.getUsuario()
           }
           else {
-            this.$root.mostrarNotificacion('Advertencia!', 'warning', 4000, 'error', response.data.message, 'bottom-right')
+            this.$root.errorAlert(response.data.message)
           }                  
         })
       },   
@@ -57,7 +57,7 @@ export default {
         let formData = new FormData()
         formData.append('codi_usuario', this.codi_usuario)               
 
-        this.axios.post(`${this.url}/Usuario/getIdUsuario`, formData)
+        this.axios.post(`${this.url}/Usuario/getUsuario`, formData)
         .then(response => {                
             if (!response.data.error) {
                 let usuario = response.data.usuario                     

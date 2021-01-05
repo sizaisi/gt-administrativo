@@ -9,10 +9,7 @@
                     style="min-height: 250px"                        
                 >   
                     <b-tab title="1. Asignar jurado" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <jurados
-                            :expediente="expediente"
-                            :idgrado_proc="grado_procedimiento.id"
-                            :idusuario="usuario.id"                                                
+                        <jurados                                                                       
                             :ruta="ruta"  
                             ref="jurados"     
                         />  
@@ -23,9 +20,7 @@
                         </div>      
                     </b-tab>
                     <b-tab title="2. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <generacion_documento                                        
-                            :expediente="expediente"  
-                            :graduando="graduando"                           
+                        <generacion_documento                                                                    
                             :asesor="asesor" 
                             :jurados="array_jurado_asignado"                                                                              
                             nombre_archivo_pdf="resolucion_designacion_jurado.php"
@@ -34,10 +29,7 @@
                         />                      
                     </b-tab>  
                     <b-tab title="3. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 2">
-                        <documentos               
-                            :expediente="expediente"
-                            :idgrado_proc="grado_procedimiento.id"
-                            :idusuario="usuario.id"                                                                    
+                        <documentos                                                                             
                             :ruta="ruta"                                                           
                             ref="documentos"
                             max_docs = "1"
@@ -49,11 +41,7 @@
                     </b-tab>                   
                     <b-tab :title="'4. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 3">
-                        <movimiento_expediente
-                            :grado_modalidad="grado_modalidad"
-                            :grado_procedimiento="grado_procedimiento"                                                    
-                            :usuario="usuario"                                                       
-                            :expediente="expediente"
+                        <movimiento_expediente                                                                                                             
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -82,9 +70,7 @@ import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
     name: 'derivado-aprobar',
-    props: {                      
-        expediente: Object,
-        graduando: Object,        
+    props: {                              
         ruta: Object,
         movimiento: Object
     },
@@ -96,10 +82,10 @@ export default {
     },
     data() {
         return {             
-            url: this.$root.API_URL,     
-            usuario: this.$store.getters.getUsuario,
-            grado_modalidad: this.$store.getters.getGradoModalidad,
-            grado_procedimiento: this.$store.getters.getGradoProcedimiento,                  
+            url: this.$root.API_URL,                 
+            usuario: this.$store.getters.getUsuario, 
+            procedimiento: this.$store.getters.getProcedimiento,  
+            expediente: this.$store.getters.getExpediente,
             tabIndex: 0,         
             tabIndex2: 0, 
             array_jurado_asignado : [],            
@@ -186,7 +172,7 @@ export default {
         getJuradosAsignados() {            
             let formData = new FormData()
             formData.append('idexpediente', this.expediente.id)
-            formData.append('idgrado_proc', this.grado_procedimiento.id)
+            formData.append('idprocedimiento', this.procedimiento.id)
             formData.append('idusuario', this.usuario.id)            
 
             this.axios.post(`${this.url}/Persona/jurado_asignado_expediente`, formData)

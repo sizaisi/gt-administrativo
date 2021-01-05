@@ -15,7 +15,7 @@ class ArchivoController
     public function show() 
     { 
         $archivo = new Archivo();                        
-        $archivo->setIdGradoProc($_POST['idgrado_proc']);
+        $archivo->setIdProcedimiento($_POST['idprocedimiento']);
 		$archivo->setIdExpediente($_POST['idexpediente']);
         $result = $archivo->getArchivosProcOrigen();
 
@@ -26,7 +26,7 @@ class ArchivoController
     {
         $archivo = new Archivo();                
         $archivo->setIdExpediente($_POST['idexpediente']);
-        $archivo->setIdGradoProc($_POST['idgrado_proc']);
+        $archivo->setIdProcedimiento($_POST['idprocedimiento']);
         $archivo->setIdUsuario($_POST['idusuario']);        
         $result = $archivo->getArchivo();
 
@@ -37,7 +37,7 @@ class ArchivoController
     {
         $archivo = new Archivo();                
         $archivo->setIdExpediente($_POST['idexpediente']);
-        $archivo->setIdGradoProc($_POST['idgrado_proc']);
+        $archivo->setIdProcedimiento($_POST['idprocedimiento']);
         $archivo->setIdUsuario($_POST['idusuario']);
         $archivo->setIdRuta($_POST['idruta']);
         $archivo->setNombreAsignado($_POST['nombre_asignado']);

@@ -54,7 +54,7 @@ class Movimiento {
 	}
 
 	//para devolver el movimiento actual de entrada a traves del idgrado-procedimiento destino
-	function getLastMovimiento($idgradproc_destino) {		
+	function getLastMovimiento($idproc_destino) {		
 		$result = array('error' => false);
 
 		//obtener el ultimo movimiento
@@ -65,7 +65,7 @@ class Movimiento {
 					INNER JOIN gt_rutas AS GT_R ON GT_R.id = GT_M.idruta 
 					INNER JOIN gt_procedimientos AS GT_P ON GT_P.id = GT_R.idproc_origen 					
 					LEFT JOIN gt_roles AS GT_RO ON GT_P.tipo_rol IS NULL AND GT_RO.id = GT_P.idrol
-				WHERE GT_R.idproc_destino = $idgradproc_destino 
+				WHERE GT_R.idproc_destino = $idproc_destino 
 					AND GT_M.idexpediente = $this->idexpediente 
 					AND GT_R.deleted_at IS NULL
 				ORDER BY GT_M.id desc limit 1";				
@@ -129,14 +129,14 @@ class Movimiento {
         return $result;
 	}
 
-	public function getExpedientesEnviados($idgradproc_origen) {
+	public function getExpedientesEnviados($idproc_origen) {
 		$result = array('error' => false);  
 		
 		$sql = "SELECT t_movimiento.*, GT_MO.fecha AS fecha_ant, GT_RU.etiqueta
 				FROM
 					(SELECT GT_M.id, GT_M.idexpediente, GT_E.codigo, GT_M.fecha AS fecha_envio, GT_E.estado, 
 						GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,
-						AC_E.nesc AS escuela, GT_R.idgradproc_origen, GT_M.idmov_anterior
+						AC_E.nesc AS escuela, GT_R.idproc_origen, GT_M.idmov_anterior
 					FROM gt_movimiento AS GT_M
 						INNER JOIN gt_rutas AS GT_R ON GT_R.id = GT_M.idruta 
 						INNER JOIN gt_expediente AS GT_E ON GT_E.id = GT_M.idexpediente 
@@ -144,7 +144,7 @@ class Movimiento {
 						INNER JOIN gt_graduando AS GT_G ON GT_G.id = GT_GE.idgraduando 		
 						INNER JOIN acdiden AS AC_I ON AC_I.cui = GT_G.cui			
 						INNER JOIN actescu AS AC_E ON AC_E.nues = GT_E.nues											
-					WHERE GT_R.idgradproc_origen = $idgradproc_origen  					
+					WHERE GT_R.idproc_origen = $idproc_origen  					
 						AND GT_M.idusuario = $this->idusuario
 						AND GT_M.aceptado = 0  
 					GROUP BY GT_GE.idexpediente 
@@ -161,7 +161,7 @@ class Movimiento {
 			}
 	
 			$result['array_exp_enviados'] = $array_exp_enviados;			
-			$result['message'] = $sql;
+			//$result['message'] = $sql;
 		}       
 		else {
 			$result['error'] = true;                    
@@ -172,7 +172,7 @@ class Movimiento {
 	}
 	
 	// registrar movimiento y actualizar procedimiento del expediente con el idgradprod_destino
-	public function mover($idgradproc_origen, $idgradproc_destino, $estado_expediente) {      
+	public function mover($idproc_origen, $idproc_destino, $estado_expediente) {      
       
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion
@@ -195,7 +195,7 @@ class Movimiento {
 		$sql = "UPDATE gt_recurso SET idmovimiento = $idmovimiento
 				WHERE idexpediente = $this->idexpediente
 				AND idusuario = $this->idusuario
-				AND idgrado_proc = $idgradproc_origen
+				AND idprocedimiento = $idproc_origen
 				AND idmovimiento IS NULL";        
 		$result_query = mysqli_query($this->conn, $sql);
   
@@ -205,7 +205,7 @@ class Movimiento {
   
 		//actualizar expediente para conocer en que procedimiento se encuentra
 		$sql = "UPDATE gt_expediente 
-				SET idgrado_procedimiento = $idgradproc_destino,
+				SET idprocedimiento = $idproc_destino,
 					fecha = now(),
 					estado = '$estado_expediente'  
 				WHERE id = $this->idexpediente";        
@@ -231,7 +231,7 @@ class Movimiento {
 	 }      
   
 	 // eliminar movimiento y actualizar procedimiento del expediente con el idgradprod_origen
-	 public function deshacer($idgradproc_origen, $fecha_ant, $estado_expediente_ant) {      
+	 public function deshacer($idproc_origen, $fecha_ant, $estado_expediente_ant) {      
 		
 		$result = array('error' => false);                
 		$this->conn->autocommit(FALSE); //iniciar transaccion
@@ -246,7 +246,7 @@ class Movimiento {
   
 		//actualizar expediente para conocer en que procedimiento se encuentra		
 		$sql = "UPDATE gt_expediente 
-				SET idgrado_procedimiento = $idgradproc_origen, 
+				SET idprocedimiento = $idproc_origen, 
 					fecha = '$fecha_ant',
 					estado = '$estado_expediente_ant' 
 				WHERE id = $this->idexpediente";        
@@ -268,11 +268,11 @@ class Movimiento {
 		//verificar y realizar transaccion
 		if($result['error'] == false) { //si no hay ningun error en querys
 		   $this->conn->commit();          
-		   $result['message'] = "El movimiento fue eliminado satisfactoriamente.";
+		   $result['message'] = "El expediente fue devuelto satisfactoriamente.";
 		}
 		else {
 		   $this->conn->rollback(); // deshacer transaccion
-		   $result['message'] = "No se pudo eliminar el movimiento.";
+		   $result['message'] = "No se pudo devolver el expediente.";
 		}
   
 		$this->conn->autocommit(TRUE); //finalizar transaccion

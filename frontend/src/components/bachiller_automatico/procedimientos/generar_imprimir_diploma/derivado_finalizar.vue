@@ -18,10 +18,7 @@
                         />                      
                     </b-tab>  
                     <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <documentos               
-                            :expediente="expediente"
-                            :idgrado_proc="grado_procedimiento.id"
-                            :idusuario="usuario.id"                                                                    
+                        <documentos                                           
                             :ruta="ruta"                                                           
                             ref="documentos"
                             max_docs = "1"
@@ -33,11 +30,7 @@
                     </b-tab>                   
                     <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 2">
-                        <movimiento_expediente
-                            :grado_modalidad="grado_modalidad"
-                            :grado_procedimiento="grado_procedimiento"                        
-                            :usuario="usuario"                                                        
-                            :expediente="expediente"
+                        <movimiento_expediente                                                                                                             
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -65,9 +58,7 @@ import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
     name: 'derivado-finalizar',
-    props: {             
-        expediente: Object,
-        graduando: Object,        
+    props: {                     
         ruta: Object,
         movimiento: Object
     },
@@ -78,10 +69,7 @@ export default {
     },
     data() {
         return {             
-            url: this.$root.API_URL,      
-            usuario: this.$store.getters.getUsuario,
-            grado_modalidad: this.$store.getters.getGradoModalidad,
-            grado_procedimiento: this.$store.getters.getGradoProcedimiento,                 
+            url: this.$root.API_URL,                  
             tabIndex: 0,         
             tabIndex2: 0,                                 
             errors: [], 

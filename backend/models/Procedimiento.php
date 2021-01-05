@@ -3,7 +3,7 @@ class Procedimiento {
 	private $id;
 	private $idgrado_modalidad;
     private $idprocedimiento;
-    private $idrol_area;
+    private $idrol;
     private $tipo_rol; 
     private $url;
     private $orden;
@@ -39,12 +39,12 @@ class Procedimiento {
 		$this->idprocedimiento = $idprocedimiento;
 	}
 
-	function getIdRolArea() {
-		return $this->idrol_area;
+	function getIdRol() {
+		return $this->idrol;
 	}
 
-	function setIdRolArea($idrol_area) {
-		$this->idrol_area = $idrol_area;
+	function setIdRol($idrol) {
+		$this->idrol = $idrol;
 	}
 
 	function getTipoRol() {
@@ -90,12 +90,12 @@ class Procedimiento {
 
             if ($tipo_usuario == 'Administrativo') {
                 $sql = "SELECT GT_P.*, GT_P.id AS idproc, COUNT(GT_E.id) AS total_expedientes,
-                        GT_P.nombre AS proc_nombre, GT_P.descripcion AS proc_descripcion 
+                        GT_P.nombre, GT_P.descripcion
                         FROM gt_procedimientos AS GT_P                        
-                        INNER JOIN gt_expediente AS GT_E ON GT_E.idgrado_procedimiento = GT_P.id
+                        INNER JOIN gt_expediente AS GT_E ON GT_E.idprocedimiento = GT_P.id
                         INNER JOIN SIAC_OPER_DEPE AS AC_OP ON AC_OP.codi_depe = GT_E.nues
                         WHERE GT_P.deleted_at IS NULL AND GT_P.idgradomodalidad = $this->idgrado_modalidad 
-                        AND GT_P.idrol =  $this->idrol_area
+                        AND GT_P.idrol =  $this->idrol
                         AND AC_OP.codi_oper = '$codi_usuario'
                         GROUP BY GT_P.id 
                         ORDER BY GT_P.id ASC";
@@ -106,9 +106,9 @@ class Procedimiento {
                         GT_P.nombre AS proc_nombre, GT_GP.descripcion AS proc_descripcion 
                         FROM gt_grado_procedimiento AS GT_GP
                         INNER JOIN gt_procedimiento AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
-                        INNER JOIN gt_expediente AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id                    
+                        INNER JOIN gt_expediente AS GT_E ON GT_E.idprocedimiento = GT_GP.id                    
                         WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
-                        AND GT_GP.idrol_area =  $this->idrol_area
+                        AND GT_GP.idrol =  $this->idrol
                         AND GT_E.id IN (SELECT R.idexpediente
                                         FROM gt_recurso AS R
                                             INNER JOIN gt_persona AS P ON P.idrecurso = R.id
@@ -124,9 +124,9 @@ class Procedimiento {
                         GT_P.nombre AS proc_nombre, GT_GP.descripcion AS proc_descripcion 
                         FROM gt_grado_procedimiento AS GT_GP
                         INNER JOIN gt_procedimiento AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
-                        INNER JOIN gt_expediente AS GT_E ON GT_E.idgrado_procedimiento = GT_GP.id                    
+                        INNER JOIN gt_expediente AS GT_E ON GT_E.idprocedimiento = GT_GP.id                    
                         WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
-                        AND GT_GP.idrol_area =  $this->idrol_area
+                        AND GT_GP.idrol =  $this->idrol
                         AND GT_E.id IN (SELECT R.idexpediente
 										FROM gt_recurso AS R
 										INNER JOIN gt_persona AS P ON P.idrecurso = R.id
@@ -149,19 +149,19 @@ class Procedimiento {
                     FROM gt_grado_procedimiento AS GT_GP
                     INNER JOIN gt_procedimiento AS GT_P ON GT_P.id = GT_GP.idprocedimiento 
                     WHERE GT_P.condicion = 1 AND GT_GP.idgrado_modalidad = $this->idgrado_modalidad 
-                    AND GT_GP.idrol_area =  $this->idrol_area 
+                    AND GT_GP.idrol =  $this->idrol 
                     AND GT_GP.id IN (" . implode(',', $array_idgrado_procedimiento) . ") ORDER BY GT_GP.id ASC";*/
 		}        
 
         $result_query = mysqli_query($this->conn, $sql);
 
-        $array_grado_procedimiento = array();
+        $array_procedimiento = array();
 
         while ($row = $result_query->fetch_assoc()) {
-            array_push($array_grado_procedimiento, $row);
+            array_push($array_procedimiento, $row);
         }
 
-        $result['array_grado_procedimiento'] = $array_grado_procedimiento;        
+        $result['array_procedimiento'] = $array_procedimiento;        
 
         return $result;
     }    

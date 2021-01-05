@@ -17,17 +17,15 @@
 
 export default {
     name: 'movimiento-expediente',
-    props: {
-        grado_modalidad: Object,
-        grado_procedimiento: Object,    
-        usuario: Object,        
-        expediente: Object,  
+    props: {                    
         movimiento: Object, //ultimo movimiento      
         ruta: Object            
     },    
     data() {
         return {             
-            url: this.$root.API_URL,                        
+            url: this.$root.API_URL,    
+            usuario: this.$store.getters.getUsuario,                
+            expediente: this.$store.getters.getExpediente,                       
             color_acciones : this.$root.color_acciones,
             estados : this.$root.estados
         }
@@ -54,8 +52,8 @@ export default {
                     formData.append('idexpediente', this.expediente.id)  
                     formData.append('idusuario', this.usuario.id)
                     formData.append('idruta', ruta.id)
-                    formData.append('idgradproc_origen', ruta.idproc_origen)
-                    formData.append('idgradproc_destino', ruta.idproc_destino)
+                    formData.append('idproc_origen', ruta.idproc_origen)
+                    formData.append('idproc_destino', ruta.idproc_destino)
                     formData.append('idmov_anterior', this.movimiento.id)
                     formData.append('estado_expediente', this.estados[ruta.etiqueta])                                 
 

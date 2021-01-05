@@ -54,15 +54,15 @@
 <script>
 export default {
     name: 'observaciones',
-    props: {        
-        expediente: Object,
-        idgrado_proc: String,    
-        idusuario: String,                        
+    props: {                
         ruta: Object
     },
     data() {
         return {             
-            url: this.$root.API_URL,                              
+            url: this.$root.API_URL,    
+            usuario: this.$store.getters.getUsuario, 
+            procedimiento: this.$store.getters.getProcedimiento,  
+            expediente: this.$store.getters.getExpediente,                            
             columnas_observaciones: [               
                 { key: 'descripcion', label: 'Observaciones' },                        
                 { key: 'acciones', label: 'Acciones', class: 'text-center' },            
@@ -103,8 +103,8 @@ export default {
         getObservaciones() {            
             let formData = new FormData()
             formData.append('idexpediente', this.expediente.id)
-            formData.append('idusuario', this.idusuario)
-            formData.append('idgrado_proc', this.idgrado_proc)            
+            formData.append('idusuario', this.usuario.id)
+            formData.append('idprocedimiento', this.procedimiento.id)            
 
             this.axios.post(`${this.url}/Observaciones/show`, formData)
                 .then(response => {                
@@ -126,8 +126,8 @@ export default {
 
             let formData = new FormData()
             formData.append('idexpediente', this.expediente.id)
-            formData.append('idgrado_proc', this.idgrado_proc)
-            formData.append('idusuario', this.idusuario)
+            formData.append('idprocedimiento', this.procedimiento.id)
+            formData.append('idusuario', this.usuario.id)
             formData.append('idruta', this.ruta.id)
             formData.append('descripcion', this.observacion.descripcion)            
 

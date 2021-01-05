@@ -16,7 +16,7 @@ class PersonaController
         {        
                 $persona = new Persona();                       
                 $persona->setIdExpediente($_POST['idexpediente']);
-                $persona->setIdGradoProc($_POST['idgrado_proc']);
+                $persona->setIdProcedimiento($_POST['idprocedimiento']);
                 $persona->setIdUsuario($_POST['idusuario']);       
                 $result = $persona->getAsesor();
 
@@ -36,7 +36,7 @@ class PersonaController
         {        
                 $persona = new Persona();                       
                 $persona->setIdExpediente($_POST['idexpediente']);                
-                $persona->setIdGradoProc($_POST['idgrado_proc']);
+                $persona->setIdProcedimiento($_POST['idprocedimiento']);
                 $persona->setIdUsuario($_POST['idusuario']);    
                 $result = $persona->getJuradoAsignadoExpediente();
 
@@ -56,7 +56,7 @@ class PersonaController
         {        
                 $persona = new Persona();                       
                 $persona->setIdExpediente($_POST['idexpediente']);
-                $persona->setIdGradoProc($_POST['idgrado_proc']);
+                $persona->setIdProcedimiento($_POST['idprocedimiento']);
                 $persona->setIdUsuario($_POST['idusuario']);     
                 $result = $persona->getJurado();
 
@@ -67,7 +67,7 @@ class PersonaController
         {
 		$persona = new Persona();                
                 $persona->setIdExpediente($_POST['idexpediente']);
-                $persona->setIdGradoProc($_POST['idgrado_proc']);
+                $persona->setIdProcedimiento($_POST['idprocedimiento']);
                 $persona->setIdUsuario($_POST['idusuario']);
                 $persona->setIdRuta($_POST['idruta']);
                 $persona->setIdDocente($_POST['iddocente']);
@@ -82,7 +82,7 @@ class PersonaController
 		$persona = new Persona();  
                 $persona->setId($_POST['id']);    
                 $persona->setIdExpediente($_POST['idexpediente']);
-                $persona->setIdGradoProc($_POST['idgrado_proc']);                
+                $persona->setIdProcedimiento($_POST['idprocedimiento']);                
                 $persona->setTipo($_POST['tipo']);   
                 $result = $persona->eliminar();        
 

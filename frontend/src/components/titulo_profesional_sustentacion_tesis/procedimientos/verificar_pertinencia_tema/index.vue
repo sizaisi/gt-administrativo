@@ -22,22 +22,12 @@
     </div>   
 
     <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
-      <aprobado_aprobar
-        :grado_modalidad="grado_modalidad"
-        :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"         
-        :expediente="expediente"
-        :graduando="graduando"
+      <aprobado_aprobar                      
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
       />              
-      <aprobado_denegar
-        :grado_modalidad="grado_modalidad"
-        :grado_procedimiento="grado_procedimiento"
-        :usuario="usuario"        
-        :expediente="expediente"
-        :graduando="graduando"
+      <aprobado_denegar                       
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
         v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
@@ -52,9 +42,7 @@ import aprobado_denegar from './aprobado_denegar.vue'
 
 export default {  
   name: 'index',  
-  props: {    
-    expediente: Object,
-    graduando: Object,
+  props: {        
     movimiento: Object,
   },
   components: {    
@@ -63,10 +51,7 @@ export default {
   },
   data() {
     return {             
-      url: this.$root.API_URL,          
-      usuario: this.$store.getters.getUsuario,
-      grado_modalidad: this.$store.getters.getGradoModalidad,
-      grado_procedimiento: this.$store.getters.getGradoProcedimiento,                              
+      url: this.$root.API_URL,                                           
       ruta_seleccionada: null,      
       estados : this.$root.estados,  
     }

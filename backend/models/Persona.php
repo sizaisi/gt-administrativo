@@ -82,7 +82,7 @@ class Persona extends Recurso {
 				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				WHERE GT_R.idexpediente = $this->idexpediente 
-                AND GT_R.idgrado_proc = $this->idgrado_proc 
+                AND GT_R.idprocedimiento = $this->idprocedimiento 
 				AND GT_R.idusuario = $this->idusuario
 				AND GT_P.tipo = 'asesor'				
 				AND GT_R.idmovimiento IS NULL";	
@@ -147,7 +147,7 @@ class Persona extends Recurso {
 				INNER JOIN actdepa AS AC_DE ON AC_DE.depa = AC_D.depend
 				INNER JOIN actfacu AS AC_F ON AC_F.facu = AC_DE.facu
 				WHERE GT_R.idexpediente = $this->idexpediente 
-                AND GT_R.idgrado_proc = $this->idgrado_proc 
+                AND GT_R.idprocedimiento = $this->idprocedimiento 
 				AND GT_R.idusuario = $this->idusuario   				
 				AND GT_P.tipo IN ('presidente', 'secretario', 'suplente') 
 				AND GT_P.estado = 1";	
@@ -217,7 +217,7 @@ class Persona extends Recurso {
 				INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_P.iddocente
 				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
 				WHERE GT_R.idexpediente = $this->idexpediente 
-                AND GT_R.idgrado_proc = $this->idgrado_proc 
+                AND GT_R.idprocedimiento = $this->idprocedimiento 
 				AND GT_R.idusuario = $this->idusuario
 				AND GT_P.tipo <> 'asesor'				
 				AND GT_R.idmovimiento IS NULL";	
@@ -250,21 +250,21 @@ class Persona extends Recurso {
 				INNER JOIN gt_recurso AS GT_R ON GT_R.id = GT_P.idrecurso
 				SET GT_P.estado = 0
 				WHERE GT_R.idexpediente = $this->idexpediente 
-				AND GT_R.idgrado_proc = $this->idgrado_proc
+				AND GT_R.idprocedimiento = $this->idprocedimiento
 				AND GT_R.idmovimiento IS NOT NULL
 				AND GT_P.tipo = '$this->tipo'
 				AND GT_P.estado = 1";      
 		$result_query = mysqli_query($this->conn, $sql);     		
   
 		if (!$result_query) {
-		   $result['error'] = $sql;                    
+		   $result['error'] = true;                    
 		}
 		
-		$sql = "INSERT INTO gt_recurso(idexpediente, idgrado_proc, idusuario, idmovimiento, idruta) 
-				VALUES ($this->idexpediente, $this->idgrado_proc, $this->idusuario, NULL, $this->idruta)";      
+		$sql = "INSERT INTO gt_recurso(idexpediente, idprocedimiento, idusuario, idmovimiento, idruta) 
+				VALUES ($this->idexpediente, $this->idprocedimiento, $this->idusuario, NULL, $this->idruta)";      
 		$result_query = mysqli_query($this->conn, $sql);     
 		
-		$idrecurso;
+		$idrecurso = NULL;
 		
 		if (!$result_query) {
 		   	$result['error'] = true;                    
@@ -324,7 +324,7 @@ class Persona extends Recurso {
 				AND idrecurso = (SELECT MAX(id) 
 								 FROM gt_recurso
 								 WHERE idexpediente = $this->idexpediente 
-								 AND idgrado_proc = $this->idgrado_proc
+								 AND idprocedimiento = $this->idprocedimiento
 								 AND idmovimiento IS NOT NULL)";
 		$result_query = mysqli_query($this->conn, $sql);     		
   
