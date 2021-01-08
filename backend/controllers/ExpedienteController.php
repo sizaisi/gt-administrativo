@@ -6,11 +6,9 @@ class ExpedienteController
         public function getList() 
         {		
 		$idprocedimiento = $_POST['idprocedimiento'];
-                $codi_usuario = $_POST['codi_usuario'];
-                $tipo_usuario = $_POST['tipo_usuario'];
-                $tipo_rol = $_POST['tipo_rol'];
+                $codi_usuario = $_POST['codi_usuario'];                
                 $expediente = new Expediente();
-                $result = $expediente->getList($idprocedimiento, $codi_usuario, $tipo_usuario, $tipo_rol);
+                $result = $expediente->getList($idprocedimiento, $codi_usuario);
         
                 echo json_encode($result);
 	}

@@ -31,8 +31,8 @@ const routes = [
     props: true
   },
   {
-    path: '/expedientes/TituloProfesional-SustentancionTesis',
-    name: 'TituloProfesional-SustentancionTesis',
+    path: '/expedientes/TituloProfesional-SustentacionTesis',
+    name: 'TituloProfesional-SustentacionTesis',
     component: require("./../views/expedientes/TituloProfesional-SustentacionTesis.vue").default, 
     props: true
   },

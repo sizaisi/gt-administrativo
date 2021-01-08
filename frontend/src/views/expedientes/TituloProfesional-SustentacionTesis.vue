@@ -9,10 +9,10 @@
         </b-button>
       </div>
       <b-card no-body>
-        <b-tabs vertical card pills>
+        <b-tabs lazy vertical card pills>
           <b-tab title="Trámite" active>
             <b-card no-body>
-              <b-tabs card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">
+              <b-tabs lazy card justified active-nav-item-class="font-weight-bold text-uppercase text-danger">
                 <b-tab title="Graduando">                                    
                   <b-card>                    
                     <div class="form-row">
@@ -311,9 +311,9 @@ export default {
   },
   created() {
     if (this.idexpediente != null) {
-      this.getLastMovimiento();
-      this.getExpediente();
+      this.getLastMovimiento();      
       this.getGraduando();
+      this.getExpediente();
       this.getArchivos();
       this.getArchivosProcOrigen();
     } else {
@@ -347,23 +347,8 @@ export default {
       this.$refs.show_file_ultimo.submit();
       this.nombre_documento = nombre_documento;
       this.modal = 1;
-    },
-    getExpediente() {     
-      let formData = new FormData()
-      formData.append('idexpediente', this.idexpediente)      
-
-      this.axios
-        .post(`${this.url}/Expediente/getExpById`, formData)
-        .then(response => {          
-          if (!response.data.error) {
-            this.expediente = response.data.expediente;   
-            this.$store.dispatch('setExpediente', this.expediente)         
-          } else {
-            console.log(response.data.message)
-          }
-        });
-    },
-    getGraduando() {            
+    },    
+    getGraduando() {              
       let formData = new FormData()
       formData.append('idexpediente', this.idexpediente)
 
@@ -378,7 +363,22 @@ export default {
           }
         });
     },
-    getArchivos() {      
+    getExpediente() {           
+      let formData = new FormData()
+      formData.append('idexpediente', this.idexpediente)      
+
+      this.axios
+        .post(`${this.url}/Expediente/getExpById`, formData)
+        .then(response => {          
+          if (!response.data.error) {
+            this.expediente = response.data.expediente;   
+            this.$store.dispatch('setExpediente', this.expediente)         
+          } else {
+            console.log(response.data.message)
+          }
+        });
+    },
+    getArchivos() {            
       let formData = new FormData()
       formData.append('idexpediente', this.idexpediente)
 

@@ -160,12 +160,11 @@ class Movimiento {
 				array_push($array_exp_enviados, $row);
 			}
 	
-			$result['array_exp_enviados'] = $array_exp_enviados;			
-			//$result['message'] = $sql;
+			$result['array_exp_enviados'] = $array_exp_enviados;						
 		}       
 		else {
 			$result['error'] = true;                    
-			$result['message'] = "No se pudo obtener los expedientes enviados.";
+			$result['message'] = "No se pudo obtener los expedientes enviados, vuelve a intentarlo más tarde.";
 		}	
   
 		return $result;		

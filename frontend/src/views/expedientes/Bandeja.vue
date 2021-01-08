@@ -8,7 +8,7 @@
     </div> 
     <b-card no-body>
         <b-tabs card active-nav-item-class="font-weight-bold text-uppercase text-danger">
-            <b-tab title="Recibidos" @click="getExpedientes(procedimiento.id, procedimiento.tipo_rol)" active>                
+            <b-tab title="Recibidos" @click="getExpedientes(procedimiento.id)" active>                
                 <div class="row">
                     <div class="col-lg-12">
                         <b-row>
@@ -182,33 +182,31 @@ export default {
   },
   created() {         
     if (this.procedimiento != null) {
-      this.getExpedientes(this.procedimiento.id, this.procedimiento.tipo_rol)    
+      this.getExpedientes(this.procedimiento.id)    
     }
     else {
       this.$router.push({ name: 'home' }); 
     }      
   },  
   methods: {            
-    getExpedientes(idprocedimiento, tipo_rol) {  
+    getExpedientes(idprocedimiento) {  
         let formData = new FormData()
         formData.append('idprocedimiento', idprocedimiento)
-        formData.append('codi_usuario', this.usuario.codi_usuario)  
-        formData.append('tipo_usuario', this.usuario.tipo)  
-        formData.append('tipo_rol', tipo_rol)  
-        
+        formData.append('codi_usuario', this.usuario.codi_usuario)                 
         this.toggleBusy()
 
         this.axios.post(`${this.url}/Expediente/getList`, formData)
-        .then(response => {            
-            if (!response.data.error) {
-                this.array_expediente = response.data.array_expediente
-                this.totalRows = this.array_expediente.length;                     
-            }
-            else {
-                console.log(response.data.message)
-            }
-            this.toggleBusy()
-        })            
+            .then(response => {                               
+                if (!response.data.error) {
+                    this.array_expediente = response.data.array_expediente
+                    this.totalRows = this.array_expediente.length;                                 
+                }
+                else {
+                    this.$root.errorAlert(response.data.message)
+                }
+
+                this.toggleBusy()
+            })                
     },
     getExpedientesEnviados(idprocedimiento) {    
         let formData = new FormData()
@@ -224,8 +222,9 @@ export default {
                 this.totalRows = this.array_exp_enviados.length;                     
             }
             else {
-               console.log(response.data.message)
+               this.$root.errorAlert(response.data.message)
             }
+            
             this.toggleBusy()
         })
     },    

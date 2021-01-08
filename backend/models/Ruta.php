@@ -75,9 +75,7 @@ class Ruta {
 		else {
 			$result['error'] = true;
 			$result['message'] = "No se pudo obtener las rutas.";            
-		}		  
-
-		//$result['message'] = $sql;  
+		}		  		
 		
 		return $result;
 	}  

@@ -39,9 +39,7 @@ class Usuario
 	public function getUsuario() {
 		$result = array('error' => false);
 
-		$sql = "SELECT * 
-				FROM gt_usuario
-				WHERE codi_usuario = '$this->codi_usuario'";
+		$sql = "SELECT * FROM gt_usuario WHERE codi_usuario = '$this->codi_usuario'";
 		$result_query = mysqli_query($this->conn, $sql);
 
 		if ($result_query && mysqli_num_rows($result_query) > 0) {

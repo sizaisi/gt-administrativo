@@ -46,7 +46,6 @@ class Archivo extends Recurso {
 	}
 
 	public function getTodosArchivos() {
-
 		$result = array('error' => false);		
   
 		$sql = "SELECT GT_R.id, GT_A.nombre_asignado AS nombre, GT_A.mime, 
@@ -71,7 +70,6 @@ class Archivo extends Recurso {
 	 }   
 
 	 public function getArchivosProcOrigen() {
-
 		$result = array('error' => false);
   
 		$sql = "SELECT GT_RE.id, GT_A.nombre_asignado AS nombre, GT_A.mime, 
