@@ -9,9 +9,7 @@
                     style="min-height: 250px"                        
                 >   
                     <b-tab title="1. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <generacion_documento                                        
-                            :expediente="expediente"  
-                            :graduando="graduando"                                                    
+                        <generacion_documento                                                                                                                      
                             nombre_archivo_pdf="diploma.php"
                             boton_nombre="Diploma"
                             ref="documentos"

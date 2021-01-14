@@ -1,7 +1,7 @@
 <?php
 class Procedimiento {
 	private $id;
-	private $idgrado_modalidad;
+	private $idtramite;
     private $idprocedimiento;
     private $idrol;
     private $tipo_rol; 
@@ -23,12 +23,12 @@ class Procedimiento {
 		$this->id = $id;
 	}
 
-	function getIdGradoModalidad() {
-		return $this->idgrado_modalidad;
+	function getIdTramite() {
+		return $this->idtramite;
 	}
 
-	function setIdGradoModalidad($idgrado_modalidad) {
-		$this->idgrado_modalidad = $idgrado_modalidad;
+	function setIdTramite($idtramite) {
+		$this->idtramite = $idtramite;
 	}	
 
 	function getIdProcedimiento() {
@@ -87,7 +87,7 @@ class Procedimiento {
                 FROM gt_procedimientos AS GT_P                        
                 INNER JOIN gt_expediente AS GT_E ON GT_E.idprocedimiento = GT_P.id
                 INNER JOIN SIAC_OPER_DEPE AS AC_OP ON AC_OP.codi_depe = GT_E.nues
-                WHERE GT_P.deleted_at IS NULL AND GT_P.idgradomodalidad = $this->idgrado_modalidad 
+                WHERE GT_P.deleted_at IS NULL AND GT_P.idtramite = $this->idtramite 
                 AND GT_P.idrol =  $this->idrol
                 AND AC_OP.codi_oper = '$codi_usuario'
                 GROUP BY GT_P.id 

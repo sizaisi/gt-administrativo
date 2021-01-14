@@ -260,8 +260,7 @@ export default {
     return {
       url: this.$root.API_URL,
       url_show_file: `${this.$root.API_URL}/utils/show_file.php`,
-      usuario: this.$store.getters.getUsuario,
-      grado_modalidad: this.$store.getters.getGradoModalidad,
+      usuario: this.$store.getters.getUsuario,      
       procedimiento: this.$store.getters.getProcedimiento,
       expediente: {},
       graduando: {},

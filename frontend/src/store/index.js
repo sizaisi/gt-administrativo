@@ -10,7 +10,7 @@ export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state: {
     usuario: null,    
-    grado_modalidad: null,    
+    tramite: null,    
     procedimiento: null,    
     graduando: null,
     expediente: null,
@@ -21,8 +21,8 @@ export default new Vuex.Store({
     SET_USUARIO(state, usuario) {
       state.usuario = usuario
     },    
-    SET_GRADO_MODALIDAD(state, grado_modalidad) {
-      state.grado_modalidad = grado_modalidad
+    SET_TRAMITE(state, tramite) {
+      state.tramite = tramite
     },    
     SET_PROCEDIMIENTO(state, procedimiento) {
       state.procedimiento = procedimiento
@@ -44,8 +44,8 @@ export default new Vuex.Store({
     setUsuario({commit}, usuario) {
       commit('SET_USUARIO', usuario)
     },
-    setGradoModalidad({commit}, grado_modalidad) {
-      commit('SET_GRADO_MODALIDAD', grado_modalidad)
+    setTramite({commit}, tramite) {
+      commit('SET_TRAMITE', tramite)
     },    
     setProcedimiento({commit}, procedimiento) {
       commit('SET_PROCEDIMIENTO', procedimiento)
@@ -92,8 +92,8 @@ export default new Vuex.Store({
     getUsuario: state => {
       return state.usuario;
     },
-    getGradoModalidad: state => {
-      return state.grado_modalidad;
+    getTramite: state => {
+      return state.tramite;
     },
     getProcedimiento: state => {
       return state.procedimiento;

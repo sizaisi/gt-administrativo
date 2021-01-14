@@ -1,7 +1,7 @@
 <template>
 <div class="container p-4" style="background-color: #fff;">
     <h5 class="text-center font-weight-bold text-uppercase text-danger" 
-        v-text="grado_modalidad.grado_titulo + ' - ' + grado_modalidad.modalidad + ': Procedimientos'">
+        v-text="tramite.nombre + ': Procedimientos'">
     </h5>
     <div class="text-center mt-3">                           
     <b-button :to="{ name: 'inicio' }" variant="outline-info"> 
@@ -29,7 +29,7 @@ export default {
     data() {
         return {                               
             url: this.$root.API_URL,            
-            grado_modalidad: this.$store.getters.getGradoModalidad,
+            tramite: this.$store.getters.getTramite,
             array_procedimiento : [],                         
             itemsPerRow: 3
         }
@@ -40,7 +40,7 @@ export default {
         },        
     },
     created() {                           
-        if (this.grado_modalidad != null) {
+        if (this.tramite != null) {
             this.getProcedimientos()
         }
         else {
@@ -52,7 +52,7 @@ export default {
             let usuario = this.$store.getters.getUsuario               
             let formData = new FormData()
             
-            formData.append('idgrado_modalidad', this.grado_modalidad.id)
+            formData.append('idtramite', this.tramite.id)
             formData.append('idrol', usuario.idrol)            
             formData.append('codi_usuario', usuario.codi_usuario)               
             

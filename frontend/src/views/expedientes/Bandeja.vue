@@ -47,7 +47,7 @@
                             </template> 
                             <template v-slot:cell(acciones)="data">                                 
                                 <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
-                                :to="{ name: grado_modalidad.componente, 
+                                :to="{ name: tramite.componente, 
                                         params: { idexpediente: data.item.id } 
                                      }"
                                 >
@@ -150,7 +150,7 @@ export default {
     return {                               
         url: this.$root.API_URL,
         usuario: this.$store.getters.getUsuario,
-        grado_modalidad: this.$store.getters.getGradoModalidad,
+        tramite: this.$store.getters.getTramite,
         procedimiento: this.$store.getters.getProcedimiento,
         color_estados : this.$root.color_estados,
         estados : this.$root.estados,                                
