@@ -9,7 +9,7 @@
                     style="min-height: 250px"                        
                 >   
                     <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <observaciones                                                
+                        <observaciones                                                                                                     
                             :ruta="ruta"                                                            
                             ref="observaciones"
                         />
@@ -19,7 +19,7 @@
                     </b-tab>                    
                     <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <movimiento_expediente                                                        
+                        <movimiento_expediente                                                                                                          
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -45,8 +45,8 @@ import observaciones from '../../recursos/observaciones.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-denegar',
-    props: {                           
+    name: 'aprobado-observar',
+    props: {                                   
         ruta: Object,
         movimiento: Object
     },
@@ -56,9 +56,9 @@ export default {
     },
     data() {
         return {             
-            url: this.$root.API_URL,              
+            url: this.$root.API_URL,                  
             tabIndex: 0,         
-            tabIndex2: 0,                                                    
+            tabIndex2: 0,                                                   
             errors: [], 
         }
     },
@@ -69,7 +69,7 @@ export default {
     },
     created() {                          
         this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id);           
-    },  
+    },
     methods: {            
         prevTab() {
             this.errors = [] 

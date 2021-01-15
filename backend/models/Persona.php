@@ -100,7 +100,7 @@ class Persona extends Recurso {
 		}		
   
 		return $result;		
-	}   
+	}   	
 	
 	public function getAllAsesores() {
 		$result = array('error' => false);

@@ -57,5 +57,14 @@ class ExpedienteController
                 $result = $expediente->actualizar_url();
         
                 echo json_encode($result);  
-	}
+        }
+        
+        public function getAsesorPropuesto() 
+        {        
+                $expediente = new Expediente();                 
+                $expediente->setId($_POST['idexpediente']);                         
+                $result = $expediente->getAsesorPropuesto();
+
+                echo json_encode($result);           
+        }
 }

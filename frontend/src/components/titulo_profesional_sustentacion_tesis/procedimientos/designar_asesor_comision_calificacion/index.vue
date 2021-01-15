@@ -22,25 +22,33 @@
     </div>   
 
     <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
-      <aprobado_derivar                
+      <aprobado_informar                
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'derivar'"                         
+        v-if="ruta_seleccionada.etiqueta == 'informar'"                         
       />                    
     </template>       
-    <template v-else-if="estados[movimiento.etiqueta] == 'denegado' && ruta_seleccionada != null">
-      <denegado_derivar                                             
+    <template v-else-if="estados[movimiento.etiqueta] == 'observado' && ruta_seleccionada != null">
+      <observado_informar                                             
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'derivar'"                  
+        v-if="ruta_seleccionada.etiqueta == 'informar'"                  
+      />                             
+    </template>     
+    <template v-else-if="estados[movimiento.etiqueta] == 'cambiado' && ruta_seleccionada != null">
+      <cambiado_informar                                             
+        :ruta="ruta_seleccionada"
+        :movimiento="movimiento"
+        v-if="ruta_seleccionada.etiqueta == 'informar'"                  
       />                             
     </template>       
   </div>    
 </template>
 
 <script>
-import aprobado_derivar from './aprobado_derivar.vue'
-import denegado_derivar from './denegado_derivar.vue'
+import aprobado_informar from './aprobado_informar.vue'
+import observado_informar from './observado_informar.vue'
+import cambiado_informar from './cambiado_informar.vue'
 
 export default {  
   name: 'index',  
@@ -48,8 +56,9 @@ export default {
     movimiento: Object,
   },
   components: {    
-    aprobado_derivar,
-    denegado_derivar
+    aprobado_informar,
+    observado_informar,
+    cambiado_informar
   },
   data() {
     return {             

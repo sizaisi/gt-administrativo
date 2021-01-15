@@ -21,7 +21,7 @@ class PersonaController
                 $result = $persona->getAsesor();
 
                 echo json_encode($result);           
-        }
+        }        
 
         public function get_all_asesores() 
         {        

@@ -53,7 +53,7 @@ class Movimiento {
 		$this->idmov_anterior = $idmov_anterior;
 	}
 
-	//para devolver el movimiento actual de entrada a traves del idgrado-procedimiento destino
+	//para devolver el movimiento actual de entrada a traves del idprocedimiento destino
 	function getLastMovimiento($idproc_destino) {		
 		$result = array('error' => false);
 

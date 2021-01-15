@@ -7,10 +7,19 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >                                           
-                    <b-tab :title="'1. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <movimiento_expediente                                                                                                           
+                >            
+                    <b-tab title="1. Asignar nuevo asesor" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <asesores                            
+                            :ruta="ruta"                              
+                            ref="asesores"     
+                        /> 
+                        <div v-if="errors.length" class="alert alert-danger" role="alert">
+                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
+                        </div>                 
+                    </b-tab>                               
+                    <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                        <movimiento_expediente                                                                                                              
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -20,7 +29,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 0">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 1">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -32,22 +41,24 @@
     </b-card>       
 </template>
 <script>
+import asesores from '../../recursos/asesores.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'aprobado-aprobar',
-    props: {                                
+    name: 'observado-informar',
+    props: {                    
         ruta: Object,
         movimiento: Object
     },
     components: {            
+        asesores,
         movimiento_expediente,           
     },
     data() {
         return {             
-            url: this.$root.API_URL,              
+            url: this.$root.API_URL,                                  
             tabIndex: 0,         
-            tabIndex2: 0,                                                    
+            tabIndex2: 0,                                                     
             errors: [], 
         }
     },
@@ -58,7 +69,7 @@ export default {
     },
     created() {                          
         this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id);           
-    },
+    },     
     methods: {            
         prevTab() {
             this.errors = [] 
@@ -67,7 +78,11 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false                                       
+            let pasar = false    
+
+            if (this.tabIndex == 0) {
+                pasar = this.validarTab1()
+            }                                    
                        
             if (pasar) {
                 this.tabIndex2++
@@ -75,7 +90,18 @@ export default {
                     this.tabIndex++        
                 })  
             }              
-        },                                                                   
+        },   
+        validarTab1() {        
+            if (!this.$refs.asesores.existeAsesor()) { //referencia al metodo del componente hijo
+                this.errors.push("Debe asignar un asesor al expediente selecccionado.")
+            }                        
+
+            if (!this.errors.length) {
+                return true
+            }      
+
+            return false
+        },                                                                
     }    
 }
 </script>

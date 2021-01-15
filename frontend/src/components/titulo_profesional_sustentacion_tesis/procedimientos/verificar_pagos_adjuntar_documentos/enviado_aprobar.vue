@@ -30,20 +30,9 @@
                                 <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
                             </ul>
                         </div>      
-                    </b-tab>                      
-                    <b-tab title="2. Adjuntar documentos" title-item-class="disabledTab" :disabled="tabIndex2 < 1">                        
-                        <documentos                                                                                                              
-                            :ruta="ruta"                                                           
-                            ref="documentos"
-                            max_docs="2"
-                            :array_opciones="array_tipo_documento"
-                        />                        
-                        <div v-if="errors.length" class="alert alert-danger" role="alert">
-                            <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>       
-                    </b-tab>                   
-                    <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 2">
+                    </b-tab>                                                          
+                    <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 1">
                         <movimiento_expediente                                                                                                           
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
@@ -54,7 +43,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 2">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 1">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -66,18 +55,15 @@
     </b-card>       
 </template>
 <script>
-
-import documentos from '../../recursos/documentos.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'derivado-aprobar',
+    name: 'enviado-aprobar',
     props: {                             
         ruta: Object,
         movimiento: Object
     },
-    components: {                    
-        documentos,
+    components: {                            
         movimiento_expediente,           
     },
     data() {
@@ -131,11 +117,7 @@ export default {
                             
             if (this.tabIndex == 0) {
                 pasar = this.validarTab1()                
-            }         
-
-            if (this.tabIndex == 1) {
-                pasar = this.validarTab2()
-            }                   
+            }                     
             
             if (pasar) {
                 this.tabIndex2++
@@ -152,18 +134,7 @@ export default {
             }      
 
             return false
-        },
-        validarTab2() {        
-            if (this.$refs.documentos.cantidadDocumentos() < 2) { //referencia al metodo del componente hijo
-                this.errors.push("Debe adjuntar 2 documentos para el expediente seleccionado.")
-            }                        
-
-            if (!this.errors.length) {
-                return true
-            }      
-
-            return false
-        },        
+        },             
         getPagos() {     
             let formData = new FormData()
             formData.append('cui', this.graduando.cui)                   

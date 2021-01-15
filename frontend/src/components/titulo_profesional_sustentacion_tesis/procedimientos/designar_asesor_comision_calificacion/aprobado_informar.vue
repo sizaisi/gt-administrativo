@@ -7,19 +7,22 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >   
-                    <b-tab title="1. Añadir observaciones" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <observaciones                                                                                                     
-                            :ruta="ruta"                                                            
-                            ref="observaciones"
-                        />
+                >            
+                    <b-tab title="1. Asignar asesor" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <div class="text-center mt-2 mb-4">
+                            <b>Asesor propuesto:</b> {{ asesor_propuesto.apn }}
+                        </div>                                              
+                        <asesores                                                              
+                            :ruta="ruta"                              
+                            ref="asesores"     
+                        /> 
                         <div v-if="errors.length" class="alert alert-danger" role="alert">
                             <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>           
-                    </b-tab>                    
+                        </div>                 
+                    </b-tab>                               
                     <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <movimiento_expediente                                                                                                          
+                        <movimiento_expediente                                                                                                           
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -41,24 +44,26 @@
     </b-card>       
 </template>
 <script>
-import observaciones from '../../recursos/observaciones.vue'
+import asesores from '../../recursos/asesores.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'aprobado-denegar',
-    props: {                                   
+    name: 'aprobado-informar',
+    props: {                           
         ruta: Object,
         movimiento: Object
     },
-    components: {    
-        observaciones,
+    components: {            
+        asesores,
         movimiento_expediente,           
     },
     data() {
         return {             
-            url: this.$root.API_URL,                  
+            url: this.$root.API_URL,    
+            expediente: this.$store.getters.getExpediente,                              
             tabIndex: 0,         
-            tabIndex2: 0,                                                   
+            tabIndex2: 0,                                                 
+            asesor_propuesto: {},     
             errors: [], 
         }
     },
@@ -68,8 +73,9 @@ export default {
         }
     },
     created() {                          
-        this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id);           
-    },
+        this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id)
+        this.getAsesorPropuesto()        
+    }, 
     methods: {            
         prevTab() {
             this.errors = [] 
@@ -78,12 +84,12 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false              
-                            
+            let pasar = false    
+
             if (this.tabIndex == 0) {
                 pasar = this.validarTab1()
-            }                            
-
+            }                                    
+                       
             if (pasar) {
                 this.tabIndex2++
                 this.$nextTick(function () {
@@ -92,8 +98,8 @@ export default {
             }              
         },   
         validarTab1() {        
-            if (this.$refs.observaciones.cantidadObservaciones() == 0) { //referencia al metodo del componente hijo
-                this.errors.push("Debe registrar observaciones para el expediente seleccionado.")
+            if (!this.$refs.asesores.existeAsesor()) { //referencia al metodo del componente hijo
+                this.errors.push("Debe asignar un asesor al expediente selecccionado.")
             }                        
 
             if (!this.errors.length) {
@@ -101,7 +107,21 @@ export default {
             }      
 
             return false
-        },                                                             
+        }, 
+        getAsesorPropuesto() {
+            let formData = new FormData()
+            formData.append('idexpediente', this.expediente.id)                                    
+            
+            this.axios.post(`${this.url}/Expediente/getAsesorPropuesto`, formData)
+            .then(response => {                               
+                if (!response.data.error) {                
+                    this.asesor_propuesto = response.data.asesor_propuesto
+                }
+                else {                
+                    console.log(response.data.message)      
+                }
+            })    
+        },                                                                       
     }    
 }
 </script>

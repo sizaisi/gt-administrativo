@@ -227,5 +227,28 @@ class Expediente {
         }
 
         return $result;   
-    }
+	}
+	
+	public function getAsesorPropuesto() {
+		$result = array('error' => false);
+
+		$sql = "SELECT REPLACE(AC_D.apn, '/', ' ') AS apn				
+				FROM gt_usuario AS GT_U
+				INNER JOIN SIAC_DOC AS AC_D ON AC_D.codper = GT_U.codi_usuario 
+				WHERE GT_U.id = (SELECT idasesor 
+							   FROM gt_expediente
+							   WHERE id = $this->id)";	
+
+		$result_query = mysqli_query($this->conn, $sql);
+
+		if ($result_query) {			
+			$result['asesor_propuesto'] = $result_query->fetch_assoc();
+		}
+		else {
+			$result['error'] = true;
+			$result['message'] = "No se pudo obtener el asesor propuesto.";            
+		}		
+  
+		return $result;		
+	}   
 }

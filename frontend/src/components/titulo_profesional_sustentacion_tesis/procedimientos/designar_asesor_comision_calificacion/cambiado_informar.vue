@@ -45,7 +45,7 @@ import asesores from '../../recursos/asesores.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'denegado-derivar',
+    name: 'cambiado-informar',
     props: {                    
         ruta: Object,
         movimiento: Object

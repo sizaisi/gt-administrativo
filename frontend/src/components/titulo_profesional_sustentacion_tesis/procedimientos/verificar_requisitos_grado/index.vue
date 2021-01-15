@@ -22,23 +22,17 @@
     </div>   
 
     <template v-if="estados[movimiento.etiqueta] == 'enviado' && ruta_seleccionada != null">                 
-      <enviado_aprobar                      
+      <enviado_derivar                      
         :ruta="ruta_seleccionada"
         :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
-      />              
-      <enviado_denegar                   
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'denegar'"                  
-      />                             
+        v-if="ruta_seleccionada.etiqueta == 'derivar'"                         
+      />                                       
     </template>              
   </div>    
 </template>
 
 <script>
-import enviado_aprobar from './enviado_aprobar.vue'
-import enviado_denegar from './enviado_denegar.vue'
+import enviado_derivar from './enviado_derivar.vue'
 
 export default {  
   name: 'index',  
@@ -46,8 +40,7 @@ export default {
     movimiento: Object,
   },
   components: {    
-    enviado_aprobar,
-    enviado_denegar
+    enviado_derivar    
   },
   data() {
     return {             
