@@ -20,35 +20,25 @@
         </div>
       </fieldset>
     </div>   
-
-    <template v-if="estados[movimiento.etiqueta] == 'derivado' && ruta_seleccionada != null">                 
-      <derivado_aprobar                      
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'aprobar'"                         
-      />              
-      <derivado_observar
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'observar'"                  
-      />                             
-    </template>              
+    <component    
+      v-if="ruta_seleccionada != null"      
+      :is="ruta_seleccionada.etiqueta"
+      :ruta="ruta_seleccionada"                            
+      :movimiento="movimiento"      
+    />                
   </div>    
 </template>
 
 <script>
-import derivado_aprobar from './derivado_aprobar.vue'
-import derivado_observar from './derivado_observar.vue'
+import aprobar from './aprobar.vue'
+import observar from './observar.vue'
 
 export default {  
   name: 'index',  
   props: {        
     movimiento: Object,
   },
-  components: {    
-    derivado_aprobar,
-    derivado_observar
-  },
+  components: { aprobar, observar },
   data() {
     return {             
       url: this.$root.API_URL,                                           

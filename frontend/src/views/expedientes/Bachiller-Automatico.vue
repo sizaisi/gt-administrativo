@@ -131,12 +131,12 @@
                             <td v-text="movimiento.nombre_usuario"></td>
                           </tr>
                           <tr>
-                            <th class="bg-light text-right">Estado:</th>
+                            <th class="bg-light text-right">Acción realizada:</th>
                             <td>
                               <b-badge
-                                :variant="color_acciones[movimiento.etiqueta]"
-                                v-text="estados[movimiento.etiqueta]"
-                                class="estado"
+                                :variant="movimiento.clase"
+                                v-text="movimiento.accion"
+                                class="accion"
                               ></b-badge>
                             </td>
                           </tr>
@@ -264,9 +264,7 @@ export default {
       procedimiento: this.$store.getters.getProcedimiento,
       expediente: {},
       graduando: {},
-      movimiento: {},
-      estados: this.$root.estados,
-      color_acciones: this.$root.color_acciones,
+      movimiento: {},      
       array_archivo: [], 
       array_archivo_ultimo: [],
       columnas_archivos: [
@@ -312,9 +310,8 @@ export default {
       formData.append('idproc_destino', this.procedimiento.id)
       formData.append('idexpediente', this.idexpediente)        
 
-      this.axios
-        .post(`${this.url}/Movimiento/ultimoMovimiento`, formData)
-        .then(response => {          
+      this.axios.post(`${this.url}/Movimiento/ultimoMovimiento`, formData)
+        .then(response => {                    
           if (!response.data.error) {
             this.movimiento = response.data.movimiento;
           } else {
@@ -406,7 +403,7 @@ export default {
   font-size: 1rem;
   margin-bottom: 0;
 }
-.estado {
+.accion {
   font-size: 0.8em;
 }
 /* Modal styles */

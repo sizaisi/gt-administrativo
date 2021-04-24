@@ -9,18 +9,18 @@
                     style="min-height: 250px"                        
                 >   
                     <b-tab title="1. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <generacion_documento                                                                                             
-                            nombre_archivo_pdf="autorizacion_emision_diploma.php"
-                            boton_nombre="Autorización emisión diploma"
+                        <generacion_documento                                                                                                                     
+                            nombre_archivo_pdf="diploma.php"
+                            boton_nombre="Diploma"
                             ref="documentos"
                         />                      
                     </b-tab>  
                     <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <documentos                                                                      
+                        <documentos                                                                                                              
                             :ruta="ruta"                                                           
                             ref="documentos"
                             max_docs = "1"
-                            nombre_asignado = "Autorización de emisión de diploma"
+                            nombre_asignado = "Diploma"
                         />
                         <div v-if="errors.length" class="alert alert-danger" role="alert">
                             <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
@@ -28,7 +28,7 @@
                     </b-tab>                   
                     <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
                         title-item-class="disabledTab" :disabled="tabIndex2 < 2">
-                        <movimiento_expediente                                                                                 
+                        <movimiento_expediente                                                        
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -55,8 +55,8 @@ import documentos from '../../recursos/documentos.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'derivado-derivar',
-    props: {                        
+    name: 'finalizar',
+    props: {                          
         ruta: Object,
         movimiento: Object
     },
@@ -67,9 +67,9 @@ export default {
     },
     data() {
         return {             
-            url: this.$root.API_URL,                              
+            url: this.$root.API_URL,                  
             tabIndex: 0,         
-            tabIndex2: 0,                                
+            tabIndex2: 0,                                 
             errors: [], 
         }
     },
@@ -80,7 +80,7 @@ export default {
     },
     created() {                          
         this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id);           
-    }, 
+    },
     methods: {            
         prevTab() {
             this.errors = [] 
@@ -116,8 +116,8 @@ export default {
             }      
 
             return false
-        },                                                                
-    },       
+        },                                             
+    }      
 }
 </script>
 <style scoped>

@@ -14,25 +14,24 @@
               button-variant="outline-primary"
               class="m-2"                      
             >
-              {{ ruta.etiqueta | capitalize }} Expediente
+              {{ ruta.accion }}
             </b-form-radio>            
           </template>                 
         </div>
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
-      <aprobado_derivar                  
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'derivar'"                         
-      />                    
-    </template>              
+    <component    
+      v-if="ruta_seleccionada != null"      
+      :is="ruta_seleccionada.componente"
+      :ruta="ruta_seleccionada"                            
+      :movimiento="movimiento"      
+    />             
   </div>    
 </template>
 
 <script>
-import aprobado_derivar from './aprobado_derivar.vue'
+import aprobar_expediente from './aprobar_expediente.vue'
 
 export default {  
   name: 'index',  
@@ -40,32 +39,21 @@ export default {
     movimiento: Object,
   },
   components: {    
-    aprobado_derivar
+    aprobar_expediente
   },
   data() {
     return {             
       url: this.$root.API_URL,       
-      ruta_seleccionada: null,      
-      estados : this.$root.estados,  
+      ruta_seleccionada: null,            
     }
-  },
-  filters: {
-    capitalize: function (value) {
-      if (!value) return ''
-        value = value.toString()
-
-      return value.charAt(0).toUpperCase() + value.slice(1)
-    }
-  },
+  },  
   computed: {
     array_ruta() {
       return this.$store.state.rutas
     }
   },
-  created() {                          
+  created() {                           
     this.$store.dispatch("getRutas");           
-  },    
-  methods: {                  
   }  
 }
 </script>

@@ -56,7 +56,7 @@ import documentos from '../../recursos/documentos.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'aceptado-derivar',
+    name: 'derivar',
     props: {                                          
         ruta: Object,
         movimiento: Object

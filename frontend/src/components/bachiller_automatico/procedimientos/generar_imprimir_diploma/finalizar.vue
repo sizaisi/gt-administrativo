@@ -7,19 +7,28 @@
                     card        
                     active-nav-item-class="font-weight-bold text-uppercase text-danger"   
                     style="min-height: 250px"                        
-                >            
-                    <b-tab title="1. Asignar nuevo asesor" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
-                        <asesores                            
-                            :ruta="ruta"                              
-                            ref="asesores"     
-                        /> 
+                >   
+                    <b-tab title="1. Generar documento" title-item-class="disabledTab" :disabled="tabIndex2 < 0">
+                        <generacion_documento                                                                                                                      
+                            nombre_archivo_pdf="diploma.php"
+                            boton_nombre="Diploma"
+                            ref="documentos"
+                        />                      
+                    </b-tab>  
+                    <b-tab title="2. Añadir documento" title-item-class="disabledTab" :disabled="tabIndex2 < 1">
+                        <documentos                                           
+                            :ruta="ruta"                                                           
+                            ref="documentos"
+                            max_docs = "1"
+                            nombre_asignado = "Diploma"
+                        />
                         <div v-if="errors.length" class="alert alert-danger" role="alert">
                             <ul><li v-for="(error, i) in errors" :key="i">{{ error }}</li></ul>
-                        </div>                 
-                    </b-tab>                               
-                    <b-tab :title="'2. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
-                        title-item-class="disabledTab" :disabled="tabIndex2 < 1">
-                        <movimiento_expediente                                                                                                              
+                        </div>       
+                    </b-tab>                   
+                    <b-tab :title="'3. '+ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1)+' expediente'" 
+                        title-item-class="disabledTab" :disabled="tabIndex2 < 2">
+                        <movimiento_expediente                                                                                                             
                             :movimiento="movimiento"
                             :ruta="ruta"                                                            
                         />
@@ -29,7 +38,7 @@
             <div class="text-center">
                 <b-button-group class="mt-3">
                     <b-button class="mr-1" @click="prevTab" :disabled="tabIndex == 0">Anterior</b-button>
-                    <b-button @click="nextTab" :disabled="tabIndex == 1">Siguiente</b-button>
+                    <b-button @click="nextTab" :disabled="tabIndex == 2">Siguiente</b-button>
                 </b-button-group>     
             </div> 
         </template>
@@ -41,24 +50,26 @@
     </b-card>       
 </template>
 <script>
-import asesores from '../../recursos/asesores.vue'
+import generacion_documento from '../../recursos/generacion_documento.vue'
+import documentos from '../../recursos/documentos.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'cambiado-informar',
-    props: {                    
+    name: 'finalizar',
+    props: {                     
         ruta: Object,
         movimiento: Object
     },
-    components: {            
-        asesores,
+    components: {    
+        generacion_documento,
+        documentos,
         movimiento_expediente,           
     },
     data() {
         return {             
-            url: this.$root.API_URL,                                  
+            url: this.$root.API_URL,                  
             tabIndex: 0,         
-            tabIndex2: 0,                                                     
+            tabIndex2: 0,                                 
             errors: [], 
         }
     },
@@ -69,7 +80,7 @@ export default {
     },
     created() {                          
         this.$store.dispatch("verificarRecursoRutasVecinas", this.ruta.id);           
-    },     
+    },
     methods: {            
         prevTab() {
             this.errors = [] 
@@ -78,12 +89,16 @@ export default {
         },  
         nextTab() {      
             this.errors = [] 
-            let pasar = false    
-
+            let pasar = false              
+                            
             if (this.tabIndex == 0) {
+                pasar = true
+            }         
+            
+            if (this.tabIndex == 1) {
                 pasar = this.validarTab1()
-            }                                    
-                       
+            }         
+
             if (pasar) {
                 this.tabIndex2++
                 this.$nextTick(function () {
@@ -92,8 +107,8 @@ export default {
             }              
         },   
         validarTab1() {        
-            if (!this.$refs.asesores.existeAsesor()) { //referencia al metodo del componente hijo
-                this.errors.push("Debe asignar un asesor al expediente selecccionado.")
+            if (this.$refs.documentos.cantidadDocumentos() == 0) { //referencia al metodo del componente hijo
+                this.errors.push("Debe registrar documentos para el expediente seleccionado.")
             }                        
 
             if (!this.errors.length) {
@@ -101,8 +116,8 @@ export default {
             }      
 
             return false
-        },                                                                
-    }    
+        },                                             
+    }      
 }
 </script>
 <style scoped>

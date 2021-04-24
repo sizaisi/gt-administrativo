@@ -47,7 +47,7 @@ export default {
             formData.append('idrol', usuario.idrol)             
 
             this.axios.post(`${this.url}/Tramite/inicio`, formData)
-            .then(response => {                                      
+            .then(response => {                                                
                 if (!response.data.error) {                    
                     this.array_tramite = response.data.array_tramite           
                 }

@@ -71,7 +71,7 @@ import documentos from '../../recursos/documentos.vue'
 import movimiento_expediente from '../../recursos/movimiento_expediente.vue'
 
 export default {
-    name: 'enviado-aprobar',
+    name: 'aprobar',
     props: {                             
         ruta: Object,
         movimiento: Object

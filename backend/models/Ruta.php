@@ -56,8 +56,9 @@ class Ruta {
 	function getRutasByIdProcOrigen() { //para devolver las rutas posibles dado un grado-procedimiento origen
 		$result = array('error' => false);
 
-		$sql = "SELECT GT_R.*, GT_P.nombre AS procedimiento_destino, GT_RO.nombre AS rol_area_destino
+		$sql = "SELECT GT_R.*, GT_A.nombre AS accion, GT_P.nombre AS procedimiento_destino, GT_RO.nombre AS rol_area_destino
 				FROM gt_rutas GT_R 
+				LEFT JOIN gt_acciones AS GT_A ON GT_A.id = GT_R.idaccion
 				LEFT JOIN gt_procedimientos AS GT_P ON GT_R.idproc_destino = GT_P.id				
 				LEFT JOIN gt_roles AS GT_RO ON GT_P.idrol = GT_RO.id
 				WHERE GT_R.idproc_origen = $this->idproc_origen AND GT_R.deleted_at IS NULL";

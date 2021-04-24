@@ -3,14 +3,12 @@
         <b-row class="justify-content-lg-center">
         <b-col col lg="8">
             <p class="text-justify">
-                <b>Nota: </b> La acción {{ ruta.etiqueta }} permite derivar el expediente al procedimiento 
+                <b>Nota: </b> La acción {{ ruta.accion }} permite derivar el expediente al procedimiento 
                 <b>{{ ruta.procedimiento_destino }}</b> a cargo de <b>{{ ruta.rol_area_destino }}</b>
             </p>                 
         </b-col>
         </b-row>
-        <b-button class="m-1" :variant="color_acciones[ruta.etiqueta]" @click="mover(ruta)">
-            {{ ruta.etiqueta | capitalize }}
-        </b-button>                                                           
+        <b-button class="m-1" variant="success" @click="mover(ruta)">Derivar</b-button>
     </div>            
 </template>
 <script>
@@ -25,25 +23,16 @@ export default {
         return {             
             url: this.$root.API_URL,     
             usuario: this.$store.getters.getUsuario,                                     
-            expediente: this.$store.getters.getExpediente,  
-            color_acciones : this.$root.color_acciones,
-            estados : this.$root.estados
-        }
-    },
-    filters: {
-        capitalize: function (value) {
-            if (!value) return ''
-            value = value.toString()
-            return value.charAt(0).toUpperCase() + value.slice(1)
+            expediente: this.$store.getters.getExpediente,                          
         }
     },    
     methods: {                    
         mover(ruta) {
             this.$bvModal.msgBoxConfirm(
-                '¿Seguro que quiere ' + ruta.etiqueta + ' este expediente?', {
-                title: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1) + ' Expediente',                    
-                okVariant: this.color_acciones[ruta.etiqueta],
-                okTitle: ruta.etiqueta.charAt(0).toUpperCase()+ruta.etiqueta.slice(1),
+                '¿Seguro que quiere derivar este expediente?', {
+                title: 'Derivar Expediente',                    
+                okVariant: 'success',
+                okTitle: 'Derivar',
                 cancelTitle: 'Cancelar',          
                 centered: true
             }).then(value => {
@@ -55,12 +44,7 @@ export default {
                     formData.append('idproc_origen', ruta.idproc_origen)
                     formData.append('idproc_destino', ruta.idproc_destino)
                     formData.append('idmov_anterior', this.movimiento.id)
-                    formData.append('estado_expediente', this.estados[ruta.etiqueta])                                 
-
-                    console.log(this.expediente)
-                    console.log(this.usuario)
-                    console.log(this.ruta)
-                    console.log(this.movimiento)
+                    formData.append('estado_expediente', ruta.accion)                                 
 
                     this.axios.post(`${this.url}/Movimiento/mover`, formData)
                         .then(response => {                                                                  

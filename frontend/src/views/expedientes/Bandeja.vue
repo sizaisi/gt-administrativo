@@ -41,10 +41,7 @@
                             @filtered="onFiltered" 
                             empty-filtered-text="No hay expedientes que coincidan con su búsqueda."
                             :busy="isBusy"                                
-                        >                         
-                            <template v-slot:cell(estado)="data">
-                                <b-badge :variant="color_estados[data.item.estado]">{{data.item.estado}}</b-badge>
-                            </template> 
+                        >                                                  
                             <template v-slot:cell(acciones)="data">                                 
                                 <b-button variant="success" size="sm" data-toggle="tooltip" data-placement="left" title="Evaluar" 
                                 :to="{ name: tramite.componente, 
@@ -108,10 +105,7 @@
                             @filtered="onFiltered" 
                             empty-filtered-text="No hay expedientes que coincidan con su búsqueda."
                             :busy="isBusy"
-                        >                         
-                            <template v-slot:cell(estado)="data">
-                                <b-badge :variant="color_estados[data.item.estado]">{{data.item.estado}}</b-badge>
-                            </template> 
+                        >                                                 
                             <template v-slot:cell(acciones)="data">                                 
                                 <b-button variant="warning" size="sm" title="Deshacer" 
                                     @click="deshacer(data.item.id, data.item.idexpediente, data.item.idproc_origen, data.item.fecha_ant, data.item.etiqueta)">
@@ -160,16 +154,14 @@ export default {
             { key: 'codigo', label: 'Código', class: 'text-center' },
             { key: 'graduando', label: 'Graduando (s)' },            
             { key: 'escuela', label: 'Escuela' },                    
-            { key: 'fecha_recepcion', label: 'Fecha Recepción', class: 'text-center' },
-            { key: 'estado', label: 'Estado', class: 'text-center' },
+            { key: 'fecha_recepcion', label: 'Fecha Recepción', class: 'text-center' },            
             { key: 'acciones', label: 'Acciones', class: 'text-center' }
         ],
         columnas_enviados: [
             { key: 'codigo', label: 'Código', class: 'text-center' },
             { key: 'graduando', label: 'Graduando (s)' },            
             { key: 'escuela', label: 'Escuela' },                    
-            { key: 'fecha_envio', label: 'Fecha Envio', class: 'text-center' },
-            { key: 'estado', label: 'Estado', class: 'text-center' },
+            { key: 'fecha_envio', label: 'Fecha Envio', class: 'text-center' },            
             { key: 'acciones', label: 'Acciones', class: 'text-center' }
         ],    
         totalRows: 1,

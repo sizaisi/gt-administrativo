@@ -21,34 +21,17 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'aprobado' && ruta_seleccionada != null">                 
-      <aprobado_informar                
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'informar'"                         
-      />                    
-    </template>       
-    <template v-else-if="estados[movimiento.etiqueta] == 'observado' && ruta_seleccionada != null">
-      <observado_informar                                             
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'informar'"                  
-      />                             
-    </template>     
-    <template v-else-if="estados[movimiento.etiqueta] == 'cambiado' && ruta_seleccionada != null">
-      <cambiado_informar                                             
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'informar'"                  
-      />                             
-    </template>       
+    <component    
+      v-if="ruta_seleccionada != null"      
+      :is="ruta_seleccionada.etiqueta"
+      :ruta="ruta_seleccionada"                            
+      :movimiento="movimiento"      
+    />             
   </div>    
 </template>
 
 <script>
-import aprobado_informar from './aprobado_informar.vue'
-import observado_informar from './observado_informar.vue'
-import cambiado_informar from './cambiado_informar.vue'
+import informar from './informar.vue'
 
 export default {  
   name: 'index',  
@@ -56,9 +39,7 @@ export default {
     movimiento: Object,
   },
   components: {    
-    aprobado_informar,
-    observado_informar,
-    cambiado_informar
+    informar    
   },
   data() {
     return {             

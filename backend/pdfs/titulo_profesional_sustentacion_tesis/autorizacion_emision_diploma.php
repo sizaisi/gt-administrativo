@@ -6,6 +6,8 @@ require_once '../../utils/functions.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     /************************ VARIABLES DE FORMULARIO *********************/
 	$expediente = json_decode($_POST['expediente']);		
+    $titulo = isset($expediente->titulo) ? $expediente->titulo : '';
+
     $graduando = json_decode($_POST['graduando']);	
     $fecha_acto_academico = '25-05-2020';
     $fecha_acuerdo = '25-05-2020';
@@ -98,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </tr>
             <tr>
                 <td><b>Nombre completo de: Trabajo de investigación/Tesis/Trabajo Académico/trabajo de Suficiencia Profesional</b></td>
-                <td>'.$expediente->titulo.'</td>
+                <td>'.$titulo.'</td>
             </tr>
             <tr>
                 <td><b>N° de Recibo por pago de Diploma</b></td>

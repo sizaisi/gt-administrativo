@@ -59,10 +59,11 @@ class Movimiento {
 
 		//obtener el ultimo movimiento
         $sql = "SELECT GT_M.id, GT_U.id AS idusuario, GT_U.codi_usuario, GT_U.tipo AS tipo_usuario, 
-		        GT_M.fecha, GT_R.etiqueta, GT_P.nombre AS procedimiento_origen, GT_P.tipo_rol, GT_RO.nombre AS rol_area_origen
+		        GT_M.fecha, GT_A.nombre AS accion, GT_A.clase, GT_P.nombre AS procedimiento_origen, GT_P.tipo_rol, GT_RO.nombre AS rol_area_origen
 				FROM gt_movimiento AS GT_M 
 					INNER JOIN gt_usuario AS GT_U ON GT_U.id = GT_M.idusuario 
 					INNER JOIN gt_rutas AS GT_R ON GT_R.id = GT_M.idruta 
+					INNER JOIN gt_acciones AS GT_A ON GT_A.id = GT_R.idaccion
 					INNER JOIN gt_procedimientos AS GT_P ON GT_P.id = GT_R.idproc_origen 					
 					LEFT JOIN gt_roles AS GT_RO ON GT_P.tipo_rol IS NULL AND GT_RO.id = GT_P.idrol
 				WHERE GT_R.idproc_destino = $idproc_destino 
@@ -132,7 +133,7 @@ class Movimiento {
 	public function getExpedientesEnviados($idproc_origen) {
 		$result = array('error' => false);  
 		
-		$sql = "SELECT t_movimiento.*, GT_MO.fecha AS fecha_ant, GT_RU.etiqueta
+		$sql = "SELECT t_movimiento.*, GT_MO.fecha AS fecha_ant
 				FROM
 					(SELECT GT_M.id, GT_M.idexpediente, GT_E.codigo, GT_M.fecha AS fecha_envio, GT_E.estado, 
 						GROUP_CONCAT(REPLACE(AC_I.apn,'/',' ') SEPARATOR ' / ') AS graduando,

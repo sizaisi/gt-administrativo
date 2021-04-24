@@ -21,18 +21,17 @@
       </fieldset>
     </div>   
 
-    <template v-if="estados[movimiento.etiqueta] == 'derivado' && ruta_seleccionada != null">                 
-      <derivado_derivar                    
-        :ruta="ruta_seleccionada"
-        :movimiento="movimiento"
-        v-if="ruta_seleccionada.etiqueta == 'derivar'"                         
-      />                    
-    </template>              
+    <component    
+      v-if="ruta_seleccionada != null"      
+      :is="ruta_seleccionada.etiqueta"
+      :ruta="ruta_seleccionada"                            
+      :movimiento="movimiento"      
+    />                     
   </div>    
 </template>
 
 <script>
-import derivado_derivar from './derivado_derivar.vue'
+import derivar from './derivar.vue'
 
 export default {  
   name: 'index',  
@@ -40,7 +39,7 @@ export default {
     movimiento: Object,
   },
   components: {    
-    derivado_derivar
+    derivar
   },
   data() {
     return {             
